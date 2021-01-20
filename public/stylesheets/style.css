@@ -1,8 +1,37 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	padding: 50px;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
-a {
-  color: #00B7FF;
+container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+form label {
+	height: 20px;
+	margin: 50px;
+  color: darkblue;
+  font-size: 20px;
+}
+input {
+	margin: 10px;
+}
+.results th {
+	font-size: 64px;
+}
+.results td {
+	font-size: 144px;
+	font-weight: bold;
+	width: 300px;
+	text-align: right;
+}
+.results_title {
+	background: tan;
+	width: 610px;
+  text-align: center;
+  margin-left: 60px;
+}
+#pickdate {
+  display: none;
+  font-size: 20px;
 }
