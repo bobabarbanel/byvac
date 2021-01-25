@@ -3,8 +3,8 @@ const router = express.Router();
 const axios = require('axios');
 const md5 = require('md5');
 const BASE_URL = "https://api.timetap.com/test";
-const apiKey = "340692"; // process.env.APIKEY; 
-const private_key = "25179069129544f4a568ac34bde87ff5"; // process.env.PRIVATE_KEY; 
+const apiKey = process.env.APIKEY; // "340692"; // 
+const private_key = process.env.PRIVATE_KEY; // "25179069129544f4a568ac34bde87ff5"; // 
 const signature = md5(apiKey + private_key);
 async function generate() {
 
