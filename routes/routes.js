@@ -13,7 +13,6 @@ async function generate() {
   try {
     const url = `${BASE_URL}/sessionToken?apiKey=${apiKey}&timestamp=${timestamp}&signature=${signature}`;
     const res = await axios.get(url);
-    // console.log(res.data.sessionToken);
     return res.data.sessionToken;
   } catch (err) {
     return err;
@@ -22,7 +21,6 @@ async function generate() {
 /* GET home page. */
 let sessionToken;
 router.get('/', function (req, res, next) {
-  console.log("get /");
   generate()
     .then(
       value => {
@@ -34,23 +32,15 @@ router.get('/', function (req, res, next) {
 
 });
 
-
-
-// const APPOINTMENTS_REPORT = BASE_URL + "/appointments/report?";
-
-
-
 async function get_appts(status, startDate, locationId) {
 
   let APPT_COUNT = BASE_URL +
     `/appointments/reportCount?statusList=${status}&startDate=${startDate}&endDate=${startDate}&locationIdList=${locationId}&&`;
   let url = APPT_COUNT + "sessionToken=" + sessionToken;
 
-  console.log(url );
 
   try {
     const res = await axios.get(url);
-    // console.log(res.data.sessionToken);
     return res.data;
   } catch (err) {
     if(err.response.status === 401) {
@@ -74,32 +64,37 @@ router.get('/appts/:date/:location/:locationId', function (req, res, next) {
   const locationId = req.params.locationId;
   save = {startDate, location, locationId };
 
-  console.log(req.params);
-  const promises = [get_appts('COMPLETED', startDate, locationId), get_appts('PENDING', startDate, locationId)]
+  const promises = [get_appts('COMPLETED', startDate, locationId), get_appts('OPEN', startDate, locationId)]
   Promise.all(promises).then(
+    
     (values) => {
+      
       res.render('results', {
         'LOCATION': location,
         'DATE': startDate,
         'COMPLETED': values[0].count,
-        'PENDING': values[1].count
+        'OPEN': values[1].count,
+        'TITLE': "Appts: " + location
       })
     }
   );
 });
-let count = 0;
+
+
 router.get('/refresh', function (req, res, next) {
 
   const {startDate, locationId } = save;
   if(startDate == undefined) return;
-
-  const promises = [get_appts('COMPLETED', startDate, locationId), get_appts('PENDING', startDate, locationId)]
+  console.log('/refresh');
+  const promises = [
+    get_appts('COMPLETED', startDate, locationId), 
+    get_appts('OPEN', startDate, locationId)
+  ]
   Promise.all(promises).then(
     ([c,p]) => {
-      if(++count === 2) sessionToken += "bug"
       res.send( {
         'COMPLETED': c.count,
-        'PENDING': p.count
+        'OPEN': p.count
       })
     }
   );

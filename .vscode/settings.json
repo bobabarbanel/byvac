@@ -3,6 +3,7 @@
         "appt",
         "appts",
         "count",
-        "datepicker"
+        "datepicker",
+        "pickdate"
     ]
 }
