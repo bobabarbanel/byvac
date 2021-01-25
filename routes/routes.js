@@ -3,9 +3,10 @@ const router = express.Router();
 const axios = require('axios');
 const md5 = require('md5');
 const BASE_URL = "https://api.timetap.com/test";
-const apiKey = "340692"; // process.env.APIKEY; 
-const private_key = "25179069129544f4a568ac34bde87ff5"; // process.env.PRIVATE_KEY; 
-const signature = md5(apiKey + private_key);
+const apiKey =  "340692"; // process.env.APIKEY; //
+const private_key = "25179069129544f4a568ac34bde87ff5"; // process.env.PRIVATE_KEY; // 
+const signature = md5("" + apiKey + private_key);
+// console.log({apiKey,private_key,signature})
 async function generate() {
 
   
@@ -13,9 +14,11 @@ async function generate() {
   const timestamp = Math.round(Date.now() / 1000);
   try {
     const url = `${BASE_URL}/sessionToken?apiKey=${apiKey}&timestamp=${timestamp}&signature=${signature}`;
+    // console.log({url})
     const res = await axios.get(url);
     return res.data.sessionToken;
   } catch (err) {
+    console.log(err)
     return err;
   }
 }
@@ -26,7 +29,7 @@ router.get('/', function (req, res, next) {
     .then(
       value => {
         sessionToken = value;
-        res.render('index', { /*sessionToken, private_key, signature, apiKey*/ });
+        res.render('index', { sessionToken, private_key, signature, apiKey});
       }
     );
 
