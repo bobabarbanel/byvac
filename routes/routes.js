@@ -5,10 +5,11 @@ const md5 = require('md5');
 const BASE_URL = "https://api.timetap.com/test";
 const apiKey = process.env.APIKEY; // "340692";
 const private_key = process.env.PRIVATE_KEY; // "25179069129544f4a568ac34bde87ff5";
+const signature = md5(apiKey + private_key);
 async function generate() {
 
   
-  const signature = md5(apiKey + private_key);
+  
   const timestamp = Math.round(Date.now() / 1000);
   try {
     const url = `${BASE_URL}/sessionToken?apiKey=${apiKey}&timestamp=${timestamp}&signature=${signature}`;
@@ -25,7 +26,7 @@ router.get('/', function (req, res, next) {
     .then(
       value => {
         sessionToken = value;
-        res.render('index', { title: private_key, url: url });
+        res.render('index', { sessionToken, private_key, url, signature, apiKey});
       }
     );
 
