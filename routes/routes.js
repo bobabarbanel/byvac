@@ -25,7 +25,7 @@ router.get('/', function (req, res, next) {
     .then(
       value => {
         sessionToken = value;
-        res.render('index', { title: sessionToken });
+        res.render('index', { title: apiKey });
       }
     );
 
