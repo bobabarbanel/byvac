@@ -25,7 +25,7 @@ router.get('/', function (req, res, next) {
     .then(
       value => {
         sessionToken = value;
-        res.render('index', { title: process.env.APIKEY });
+        res.render('index', { title: sessionToken });
 
       }
     );
