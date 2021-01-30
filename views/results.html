@@ -19,14 +19,16 @@
 
 <body>
     <h1 class="results_title">
+        <i id="progress" class="fas fa-spinner fa-pulse"></i>
         <%= LOCATION %>:&nbsp;&nbsp;<%= DATE %>
     </h1>
-    <!-- <div id="bar"></div> -->
+    <div id="bar"></div>
+    
     <table class="results">
         <tbody>
             <tr>
                 <th>Open</th>
-                <td style="background: pink;" id="p[en" );>
+                <td style="background: pink;" id="open" );>
                     <%= OPEN %>
                 </td>
             </tr>

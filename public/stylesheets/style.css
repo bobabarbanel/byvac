@@ -17,10 +17,11 @@ input {
 	margin: 10px;
 }
 .results th {
-	font-size: 64px;
+	font-size: 54px;
+	width: 50%;
 }
 .results td {
-	font-size: 144px;
+	font-size: 136px;
 	font-weight: bold;
 	width: 300px;
 	text-align: right;
@@ -36,12 +37,15 @@ input {
 	font-size: 20px;
 }
 
-/* .syringe {
-	position: absolute;
-    top: 115px;
-    left: 100px;
-    color: rgb(34, 0, 255);
-    z-index: 10;
-    display: block;
-    font-size: 32px;
-} */
+.results td {
+	transition: all 1s ease;
+}
+#bar {
+	display: block;
+	height: 10px;
+	background: cyan;
+	max-width: 50%;
+	margin-bottom: 10px;
+}
+.fa-spinner {font-size:24px}
+
