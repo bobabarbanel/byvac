@@ -16,14 +16,14 @@ $(function () {
     }, refreshTime);
     async function draw(start, end) {
         // $(".progress").css("opacity",1)
-        const interval = setInterval(() => {
+        const indicator = setInterval(() => {
             const now = Date.now() - start;
 
-            console.log((now / end) * tableWidth);
+            // console.log((now / end) * tableWidth);
             $("#bar").css("width", (now / end) * (tableWidth * 1.2) + "px")
             // console.log({now, end})
             if (now >= (.98) * end) {
-                clearInterval(interval);
+                clearInterval(indicator);
                 // $(".progress").css("opacity",0)
                 $("#bar").css("width", 0.1 + "%")
             }
@@ -34,12 +34,12 @@ $(function () {
     }
     async function refreshValues() {
         // const value = await axios.get('/refresh');
-        const { COMPLETED, OPEN } =  //value.data;
-        {
-            COMPLETED: Math.floor(Math.random() * 50),
-            OPEN: 50 - Math.floor(Math.random() * 10),
-        }
-        console.log({ COMPLETED, OPEN })
+        const { COMPLETED, OPEN } =  value.data;
+        // {
+        //     COMPLETED: Math.floor(Math.random() * 50),
+        //     OPEN: 50 - Math.floor(Math.random() * 10),
+        // }
+        // console.log({ COMPLETED, OPEN })
         if (OPEN == 0) { // no more OPEN vaccines
             clearInterval(interval);
             $('body').css("background", "orange");
