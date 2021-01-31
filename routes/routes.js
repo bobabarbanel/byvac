@@ -9,15 +9,14 @@ const apiKey = "340692";
 const private_key = "25179069129544f4a568ac34bde87ff5";
 const signature = md5("" + apiKey + private_key);
 let tokenURL;
-console.log("start", { apiKey, private_key, signature })
-console.log("start", {apiKey,private_key,signature})
+// console.log("start", {apiKey,private_key,signature})
 async function generate() {
   try {
     const timestamp = Math.round(Date.now() / 1000);
     tokenURL = `${BASE_URL}/sessionToken?apiKey=${apiKey}` +
       `&timestamp=${timestamp}&signature=${signature}`;
 
-    console.log("generate", { tokenURL, apiKey, private_key, signature });
+    // console.log("generate", { tokenURL, apiKey, private_key, signature });
 
     const res = await axios.get(tokenURL);
     return res.data.sessionToken;
@@ -34,8 +33,8 @@ router.get('/', function (req, res, next) {
     .then(
       value => {
         sessionToken = value;
-        console.log("/", { sessionToken })
-        res.render('index', {  sessionToken, private_key, tokenURL, signature, apiKey });
+        // console.log("/", { sessionToken })
+        res.render('index');
       }
     );
   } catch(err) {
@@ -93,20 +92,31 @@ router.get('/appts/:date/:location/:locationId', function (req, res, next) {
 });
 
 
-router.get('/refresh', function (req, res, next) {
+router.get('/refreshOPEN', function (req, res, next) {
 
   const { startDate, locationId } = save;
   if (startDate == undefined) return;
-  console.log('/refresh');
-  const promises = [
-    get_appts('COMPLETED', startDate, locationId),
-    get_appts('OPEN', startDate, locationId)
-  ]
-  Promise.all(promises).then(
-    ([c, p]) => {
+  console.log('/refreshOPEN');
+
+  get_appts('OPEN', startDate, locationId).then(
+    (v) => {
       res.send({
-        'COMPLETED': c.count,
-        'OPEN': p.count
+        'OPEN': v.count
+      })
+    }
+  );
+});
+
+router.get('/refreshCOMPLETED', function (req, res, next) {
+
+  const { startDate, locationId } = save;
+  if (startDate == undefined) return;
+  console.log('/refreshCOMPLETED');
+
+  get_appts('COMPLETED', startDate, locationId).then(
+    (v) => {
+      res.send({
+        'COMPLETED': v.count
       })
     }
   );
