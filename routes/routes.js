@@ -4,19 +4,17 @@ const axios = require('axios');
 const md5 = require('md5');
 const BASE_URL = "https://api.timetap.com/test";
 // const apiKey = process.env.APIKEY;
-const apiKey = "340692"; 
+const apiKey = "340692";
 // const private_key = process.env.PRIVATE_KEY;
 const private_key = "25179069129544f4a568ac34bde87ff5";
 const signature = md5("" + apiKey + private_key);
-let tokenURL;
+
 // console.log("start", {apiKey,private_key,signature})
 async function generate() {
   try {
     const timestamp = Math.round(Date.now() / 1000);
-    tokenURL = `${BASE_URL}/sessionToken?apiKey=${apiKey}` +
+    const tokenURL = `${BASE_URL}/sessionToken?apiKey=${apiKey}` +
       `&timestamp=${timestamp}&signature=${signature}`;
-
-    // console.log("generate", { tokenURL, apiKey, private_key, signature });
 
     const res = await axios.get(tokenURL);
     return res.data.sessionToken;
@@ -26,37 +24,41 @@ async function generate() {
   }
 }
 /* GET home page. */
-let sessionToken;
 router.get('/', function (req, res, next) {
   try {
     generate()
-    .then(
-      value => {
-        sessionToken = value;
-        // console.log("/", { sessionToken })
-        res.render('index');
-      }
-    );
-  } catch(err) {
+      .then(
+        sessionToken => {
+          res.render('index', { sessionToken });
+        }
+      );
+  } catch (err) {
     console.log(err.data)
     return err;
   }
 });
 
-async function get_appts(status, startDate, locationId) {
-  let APPT_COUNT = BASE_URL +
-    `/appointments/reportCount?statusList=${status}` +
-    `&startDate=${startDate}&endDate=${startDate}&locationIdList=${locationId}&&`;
-  let url = APPT_COUNT + "sessionToken=" + sessionToken;
+async function get_appts(status, startDate, locationId, sessionToken) {
+  if (sessionToken === undefined) {
+    throw new Error("No sessionToken");
+  }
+  const APPT_COUNT = BASE_URL +
+    `/appointmentList/reportCount?statusList=${status}` +
+    `&startDate=${startDate}&endDate=${startDate}&locationIdList=${locationId}&`;
 
+  const url = APPT_COUNT + "sessionToken=" + sessionToken;
+
+  // console.log({ url, save })
 
   try {
     const res = await axios.get(url);
+    // console.log("get appts", res.data)
     return res.data;
   } catch (err) {
     if (err.response.status === 401) {
 
       sessionToken = await generate(); // get new value for sessionToken
+      save.sessionToken = sessionToken;
       let url = APPT_COUNT + "sessionToken=" + sessionToken;
       try {
         const res = await axios.get(url); // try again
@@ -69,17 +71,22 @@ async function get_appts(status, startDate, locationId) {
 
 }
 let save = {};
-router.get('/appts/:date/:location/:locationId', function (req, res, next) {
+router.get('/appts/:date/:location/:locationId/:sessionToken', function (req, res, next) {
   const startDate = req.params.date;
   const location = req.params.location;
   const locationId = req.params.locationId;
-  save = { startDate, location, locationId };
+  const sessionToken = req.params.sessionToken;
+  save = { startDate, location, locationId, sessionToken };
+  // console.log(save);
 
-  const promises = [get_appts('COMPLETED', startDate, locationId), get_appts('OPEN', startDate, locationId)]
+  const promises = [
+    get_appts('COMPLETED', startDate, locationId, sessionToken),
+    get_appts('OPEN', startDate, locationId, sessionToken)
+  ]
   Promise.all(promises).then(
 
     (values) => {
-
+      // console.log({ values })
       res.render('results', {
         'LOCATION': location,
         'DATE': startDate,
@@ -94,11 +101,11 @@ router.get('/appts/:date/:location/:locationId', function (req, res, next) {
 
 router.get('/refreshOPEN', function (req, res, next) {
 
-  const { startDate, locationId } = save;
+  const { startDate, locationId, sessionToken } = save;
   if (startDate == undefined) return;
-  console.log('/refreshOPEN');
+  // console.log('/refreshOPEN');
 
-  get_appts('OPEN', startDate, locationId).then(
+  get_appts('OPEN', startDate, locationId, sessionToken).then(
     (v) => {
       res.send({
         'OPEN': v.count
@@ -109,11 +116,11 @@ router.get('/refreshOPEN', function (req, res, next) {
 
 router.get('/refreshCOMPLETED', function (req, res, next) {
 
-  const { startDate, locationId } = save;
+  const { startDate, locationId, sessionToken } = save;
   if (startDate == undefined) return;
-  console.log('/refreshCOMPLETED');
+  // console.log('/refreshCOMPLETED');
 
-  get_appts('COMPLETED', startDate, locationId).then(
+  get_appts('COMPLETED', startDate, locationId, sessionToken).then(
     (v) => {
       res.send({
         'COMPLETED': v.count
