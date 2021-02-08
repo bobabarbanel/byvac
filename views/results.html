@@ -18,43 +18,56 @@
 </head>
 
 <body>
-    <h1 class="results_title">
-        <i id="progress" class="fas fa-spinner fa-pulse"></i>
-        <%= LOCATION %>:&nbsp;&nbsp;<%= DATE %>
-    </h1>
-    <div id="bar"></div>
-    
-    <table class="results">
-        <tbody>
-            <tr>
-                <th>Open</th>
-                <td style="background: pink;" id="open" );>
-                    <%= OPEN %>
-                </td>
-            </tr>
-            <tr>
-                <th>Completed</th>
-                <td id="completed">
-                    <%= COMPLETED %>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <hr>
-                </th>
-                <th>
-                    <hr>
-                </th>
-            </tr>
-            <tr>
-                <th>Total</th>
-                <td id="total">
-                    <%= (COMPLETED + OPEN) %>
-                </td>
-            </tr>
-    </table>
-    <p id="time"></p>
-    <!-- <div class="syringe"><i class="fas fa-syringe fa-pulse"></i></div> -->
+    <container>
+        <h1 class="results_title">
+            <i id="progress" class="fas fa-spinner fa-pulse"></i>
+            <%= LOCATION %>:&nbsp;&nbsp;<%= startDate %>
+        </h1>
+        <data style="display: none">
+            <locationId>
+                <%= locationId %>
+            </locationId>
+            <startDate>
+                <%= startDate %>
+            </startDate>
+        </data>
+        <div id="bar"></div>
+
+        <table class="results">
+            <tbody>
+                <tr>
+                    <th>Open</th>
+                    <td style="background: pink;" id="OPEN" );>
+                        <%= OPEN %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Completed</th>
+                    <td id="COMPLETED">
+                        <%= COMPLETED %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <hr>
+                    </th>
+                    <th>
+                        <hr>
+                    </th>
+                </tr>
+                <tr class="titlerow">
+                    <th>Total</th>
+                    <td id="TOTAL">
+                        <%= TOTAL %>
+                    </td>
+                </tr>
+        </table>
+        <others>
+            <div>Pending:<span id="PENDING">&nbsp;<%= PENDING %></span></div>
+            <div>Cancelled:<span id="CANCELLED">&nbsp;<%= CANCELLED %></span></div>
+        </others>
+        <p id="time"></p>
+    </container>
     <script src=" /js/results.js">
     </script>
 </body>
