@@ -91,7 +91,7 @@ router.get('/appts/:startDate/:location/:locationId', function (req, res, next) 
   const promises = [
     get_appts('OPEN', startDate, locationId),
     get_appts('COMPLETED', startDate, locationId),
-    get_appts('PENDING}', startDate, locationId),
+    get_appts('PENDING', startDate, locationId),
     get_appts('CANCELLED', startDate, locationId)
   ]
   Promise.all(promises).then(
