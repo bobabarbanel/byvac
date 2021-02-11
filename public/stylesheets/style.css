@@ -1,5 +1,5 @@
 body {
-	padding: 50px;
+	padding: 10px;
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 container {
@@ -66,4 +66,10 @@ others > div {
 }
 others span {
 	margin-left: 10px;
+}
+.results_title > span {
+	width: 70px;
+	text-align: center;
+	font-weight: normal;
+	color: green;
 }

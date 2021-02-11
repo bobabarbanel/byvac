@@ -1,0 +1,3 @@
+{ token: 'st.api.api.11a6b72bdab84878a8631379c7964577' }
+https://api.timetap.com/test/appointmentList/reportCount?statusList=PENDING&startDate=2021-02-12&endDate=2021-02-12&locationIdList=466979&sessionToken=st.api.api.11a6b72bdab84878a8631379c7964577
+PENDING { count: 0 }

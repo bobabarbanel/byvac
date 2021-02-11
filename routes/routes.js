@@ -19,6 +19,7 @@ async function generate() {
       `&timestamp=${timestamp}&signature=${signature}`;
 
     const res = await axios.get(tokenURL);
+    // console.log({ token: res.data.sessionToken})
     sessionToken = res.data.sessionToken;
     return res.data.sessionToken;
   } catch (err) {
