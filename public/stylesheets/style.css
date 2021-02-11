@@ -73,3 +73,6 @@ others span {
 	font-weight: normal;
 	color: green;
 }
+#pdiv {
+	opacity: 0;
+}
