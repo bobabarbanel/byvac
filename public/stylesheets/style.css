@@ -21,11 +21,11 @@ input {
 	width: 610px;
 }
 .results th {
-	font-size: 44px;
+	font-size: 36px;
 	width: 50%;
 }
 .results td {
-	font-size: 120px;
+	font-size: 108px;
 	font-weight: bold;
 	width: 300px;
 	text-align: right;
