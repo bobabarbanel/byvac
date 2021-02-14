@@ -34,8 +34,7 @@ router.get('/', function (req, res, next) {
       .then(
         value => {
           sessionToken = value;
-          //console.log({ sessionToken });
-          
+
           res.render('index');
         }
       );
@@ -52,7 +51,7 @@ async function get_appts(status, startDate, locationId) {
   startDate = startDate.trim();
   status = status.trim();
   locationId = locationId.trim();
-  
+
   const APPT_COUNT = BASE_URL +
     `/appointmentList/reportCount?statusList=${status}` +
     `&startDate=${startDate}&endDate=${startDate}&locationIdList=${locationId}`;
@@ -70,7 +69,7 @@ async function get_appts(status, startDate, locationId) {
     if (err.response.status === 401) {
 
       sessionToken = await generate(); // get new value for sessionToken
-      
+
       let url = APPT_COUNT + "&sessionToken=" + sessionToken;
       try {
         const res = await axios.get(url); // try again
@@ -84,7 +83,7 @@ async function get_appts(status, startDate, locationId) {
 }
 
 router.get('/appts/:startDate/:location/:locationId', function (req, res, next) {
-  const {startDate, location, locationId } = req.params;
+  const { startDate, location, locationId } = req.params;
   // console.log(save);
   // startDate = startDate.trim();
   // location = location.trim();
@@ -121,47 +120,23 @@ router.get('/appts/:startDate/:location/:locationId', function (req, res, next) 
 router.get('/refresh/:status/:startDate/:locationId', function (req, res, next) {
 
   const { status, startDate, locationId } = req.params;
-  
+
   // console.log('/refreshCOMPLETED');
   perform_get(status, startDate, locationId, res);
 });
 
-// router.get('/refreshCOMPLETED/:startDate/:locationId', function (req, res, next) {
 
-//   const { startDate, locationId } = req.params;
-  
-//   // console.log('/refreshCOMPLETED');
-//   perform_get('COMPLETED', startDate, locationId, res);
-// });
+function perform_get(status, startDate, locationId, res) {
 
-// router.get('/refreshCANCELLED/:startDate/:locationId', function (req, res, next) {
-
-//   const { startDate, locationId } = req.params;
-  
-//   // console.log('/refreshCOMPLETED');
-//   perform_get('CANCELLED', startDate, locationId, res);
-// });
-
-// router.get('/refreshPENDING/:startDate/:locationId', function (req, res, next) {
-
-//   const { startDate, locationId } = req.params;
-//   // console.log('/refreshCOMPLETED');
-//   perform_get('PENDING', startDate, locationId, res);
-// });
-
- function perform_get(status, startDate, locationId, res) {
-  
   if (startDate == undefined) return;
   get_appts(status, startDate, locationId).then(
     (v) => {
+      console.log(status, {count: v.count})
       res.send({
         count: v.count
       })
     }
   );
- }
-
-
-
+}
 
 module.exports = router;
