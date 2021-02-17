@@ -73,6 +73,6 @@ others span {
 	font-weight: normal;
 	color: green;
 }
-#pdiv {
-	opacity: 0;
+#pdiv { /* TODO: remove this css spec */
+	opacity: 1;
 }

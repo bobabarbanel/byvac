@@ -2,8 +2,6 @@ $(function () {
     $('.site input').on("change", function() {
         $('#pickdate').show();
         setTimeout('$("#datepicker").focus();', 320);
-        
-
     })
     $(window).on('focus', function() {
         $('#pickdate').hide();
@@ -19,7 +17,7 @@ $(function () {
         const locationId = $('.site input:checked').val();
         
         // console.log(startDate, location, locationId);
-        window.open(`/appts/${startDate}/${location}/${locationId}`);
+        window.open(`/appts/${startDate}/${location}/${locationId}`, '_self');
         // window.open(`/appts/${startDate}/${location}`);
     }
 });
