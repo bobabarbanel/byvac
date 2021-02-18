@@ -30,14 +30,18 @@ async function generate() {
 /* GET home page. */
 router.get('/', function (req, res, next) {
   try {
-    generate()
-      .then(
-        value => {
-          sessionToken = value;
+    if (sessionToken === null) {
+      generate()
+        .then(
+          value => {
+            sessionToken = value;
+            res.render('index');
+          }
+        );
+    } else {
+      res.render('index');
+    }
 
-          res.render('index');
-        }
-      );
   } catch (err) {
     console.log(err.data)
     return err;
@@ -91,14 +95,14 @@ router.get('/appts/:startDate/:location/:locationId', function (req, res, next) 
 });
 
 function prep_results(data) {
-  
+
   const results = {};
   // TODO: temporary PENDING = PENDING_CONFIRMATION
   // TODO: temporary hack
   if (data.PENDING_CONFIRMATION) {
     data.PENDING = data.PENDING_CONFIRMATION;
   }
-  console.log(data);
+  // console.log(data);
   const tags = ["OPEN", "CANCELLED", "COMPLETED", "PENDING"];
   for (let tag of tags) {
     // console.log(tag, data[tag])
