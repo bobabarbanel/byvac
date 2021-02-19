@@ -19,7 +19,6 @@ async function generate() {
       `&timestamp=${timestamp}&signature=${signature}`;
 
     const res = await axios.get(tokenURL);
-    // console.log({ token: res.data.sessionToken})
     sessionToken = res.data.sessionToken;
     return res.data.sessionToken;
   } catch (err) {
@@ -48,15 +47,15 @@ router.get('/', function (req, res, next) {
   }
 });
 
-async function get_appts(startDate, locationId) {
+async function get_appts(status, startDate, locationId) {
   if (sessionToken === null) {
     throw new Error("No sessionToken");
   }
   startDate = startDate.trim();
   locationId = locationId.trim();
-
-  const APPT_COUNT = BASE_URL +
-    `/appointments/countByStatus/location/${locationId}?startDate=${startDate}&endDate=${startDate}`;
+  const APPT_COUNT =
+    `${BASE_URL}/appointmentList/reportCount?statusList=${status}`
+    + `&startDate=${startDate}&endDate=${startDate}&locationIdList=${locationId}`;
 
   const url = APPT_COUNT + "&sessionToken=" + sessionToken;
 
@@ -82,44 +81,84 @@ async function get_appts(startDate, locationId) {
 
 router.get('/appts/:startDate/:location/:locationId', function (req, res, next) {
   const { startDate, location, locationId } = req.params;
-  get_appts(startDate, locationId).then(
-    (data) => {
-      let results = prep_results(data);
+  // get_appts(startDate, locationId).then(
+  //   (data) => {
+  //     let results = prep_results(data);
+  //     console.log(results);
+  //     results.TITLE = "Appts: " + location;
+  //     results.LOCATION = location;
+  //     results.startDate = startDate;
+  //     results.locationId = locationId;
+  //     res.render('results', results)
+  //   }
+  // );
+  const promises = [];
+  results = {};
+  for (status of ["OPEN", "CANCELLED", "COMPLETED"]) {
+    promises.push(get_appts(status, startDate, locationId));
+  }
+  Promise.all(promises).then(
+    (values) => {
+      results.OPEN = values[0].count;
+      results.CANCELLED = values[1].count;
+      results.COMPLETED = values[2].count;
+      results.PENDING = "???"
+      results.TOTAL = results.OPEN + results.COMPLETED;
+      
       results.TITLE = "Appts: " + location;
       results.LOCATION = location;
       results.startDate = startDate;
       results.locationId = locationId;
       res.render('results', results)
     }
-  );
+  )
 });
 
-function prep_results(data) {
+// function prep_results(data) {
 
-  const results = {};
-  // TODO: temporary PENDING = PENDING_CONFIRMATION
-  // TODO: temporary hack
-  if (data.PENDING_CONFIRMATION) {
-    data.PENDING = data.PENDING_CONFIRMATION;
-  }
-  // console.log(data);
-  const tags = ["OPEN", "CANCELLED", "COMPLETED", "PENDING"];
-  for (let tag of tags) {
-    // console.log(tag, data[tag])
-    results[tag] = data[tag] || 0;
-    // console.log(results[tag])
-  }
+//   const results = {};
+//   // TODO: temporary PENDING = PENDING_CONFIRMATION
+//   // TODO: temporary hack
+//   if (data.PENDING_CONFIRMATION) {
+//     data.PENDING = data.PENDING_CONFIRMATION;
+//   }
+//   // console.log(data);
+//   const tags = ["OPEN", "CANCELLED", "COMPLETED", "PENDING"];
+//   for (let tag of tags) {
+//     // console.log(tag, data[tag])
+//     results[tag] = data[tag] || 0;
+//     // console.log(results[tag])
+//   }
 
-  results.TOTAL = results.OPEN + results.COMPLETED;
-  return results;
-}
+//   results.TOTAL = results.OPEN + results.COMPLETED;
+//   return results;
+// }
 
 router.get('/refresh/:startDate/:locationId', function (req, res, next) {
   const { startDate, locationId } = req.params;
   if (startDate == undefined) return;
-  get_appts(startDate, locationId).then(
-    (data) => res.send(prep_results(data))
-  );
+  // get_appts(startDate, locationId).then(
+  //   (data) => res.send(prep_results(data))
+  // );
+  const promises = [];
+  results = {};
+  for (status of ["OPEN", "CANCELLED", "COMPLETED"]) {
+    promises.push(get_appts(status, startDate, locationId));
+  }
+  Promise.all(promises).then(
+    (values) => {
+      results.OPEN = values[0].count;
+      results.CANCELLED = values[1].count;
+      results.COMPLETED = values[2].count;
+      results.PENDING = "???"
+      results.TOTAL = results.OPEN + results.COMPLETED;
+      // results.TITLE = "Appts: " + location;
+      // results.LOCATION = location;
+      // results.startDate = startDate;
+      // results.locationId = locationId;
+      res.send(results)
+    }
+  )
 });
 
 module.exports = router;

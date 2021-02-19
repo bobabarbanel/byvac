@@ -14,24 +14,24 @@ axios.get(tokenURL).then(
     (r) => {
         const sessionToken = r.data.sessionToken;
         console.log({ sessionToken });
-        // getCount('COMPLETED', sessionToken);
-        // getCount('OPEN', sessionToken);
+        getCount('COMPLETED', sessionToken);
+        getCount('OPEN', sessionToken);
         // getCount('PENDING', sessionToken);
-        getTest(sessionToken)
+        // getTest(sessionToken)
     }
 );
 
-// function getCount(status, token) {
-//     const theURL =
-//         `${BASE_URL}/appointmentList/reportCount?statusList=${status}`
-//         + `&startDate=2021-02-19&endDate=2021-02-19&locationIdList=466979&sessionToken=${token}`;
-//     console.log(theURL);
-//     axios.get(theURL).then(
-//         (v) => {
-//             console.log(status, v.data);
-//         }
-//     ).catch(e => console.log(e))
-// }
+function getCount(status, token) {
+    const theURL =
+        `${BASE_URL}/appointmentList/reportCount?statusList=${status}`
+        + `&startDate=2021-02-18&endDate=2021-02-18&locationIdList=466979&sessionToken=${token}`;
+    console.log(theURL);
+    axios.get(theURL).then(
+        (v) => {
+            console.log(status, v.data);
+        }
+    ).catch(e => console.log(e))
+}
 
 function getTest(token) {
     // /appointments/countByStatus/location/{locationId}
