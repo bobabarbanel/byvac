@@ -3,6 +3,7 @@ const router = express.Router();
 const axios = require('axios');
 const md5 = require('md5');
 const BASE_URL = "https://api.timetap.com/test";
+const log = console.log;
 // const apiKey = process.env.APIKEY;
 const apiKey = "340692";
 // const private_key = process.env.PRIVATE_KEY;
@@ -22,7 +23,7 @@ async function generate() {
     sessionToken = res.data.sessionToken;
     return res.data.sessionToken;
   } catch (err) {
-    console.log(err.data)
+    log(err.data)
     return err;
   }
 }
@@ -42,7 +43,7 @@ router.get('/', function (req, res, next) {
     }
 
   } catch (err) {
-    console.log(err.data)
+    log(err.data)
     return err;
   }
 });
@@ -61,7 +62,6 @@ async function get_appts(status, startDate, locationId) {
 
   try {
     const res = await axios.get(url);
-    // console.log("get appts", res.data)
     return res.data;
   } catch (err) {
     if (err.response.status === 401) {
@@ -92,7 +92,6 @@ async function count_appts(startDate, locationId) {
 
   try {
     const res = await axios.get(url);
-    // console.log("get appts", res.data)
     return res.data;
   } catch (err) {
     if (err.response.status === 401) {
@@ -115,7 +114,6 @@ router.get('/appts/:startDate/:location/:locationId', function (req, res, next) 
   count_appts(startDate, locationId).then(
     (data) => {
       let results = prep_results(data);
-      console.log('/appts',results);
       results.TITLE = "Appts: " + location;
       results.LOCATION = location;
       results.startDate = startDate;
@@ -151,16 +149,12 @@ router.get('/appts/:startDate/:location/:locationId', function (req, res, next) 
 function prep_results(data) {
 
   const results = {};
-  
-  // console.log(data);
+
   const tags = ["OPEN", "CANCELLED", "COMPLETED", "PENDING"];
   for (let tag of tags) {
-    // console.log(tag, data[tag])
-    results[tag] = data[tag] || 0;
-    // console.log(results[tag])
+    results[tag] = data[tag] || 0; // default value is zero
   }
 
-  // results.OPEN; // += results.CONFIRMED; // TODO: needed under new version??
   results.TOTAL = results.OPEN + results.COMPLETED;
   return results;
 }
