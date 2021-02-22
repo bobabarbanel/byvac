@@ -1,4 +1,5 @@
 $(function () {
+    $('.site input').prop('checked', false);
     $('.site input').on("change", function() {
         $('#pickdate').show();
         setTimeout('$("#datepicker").focus();', 320);
