@@ -49,7 +49,7 @@ router.get('/', function (req, res, next) {
 
 async function get_appts(status, startDate, locationId) {
   if (sessionToken === null) {
-    throw new Error("No sessionToken");
+    sessionToken = await generate();
   }
   startDate = startDate.trim();
   locationId = locationId.trim();
@@ -78,87 +78,118 @@ async function get_appts(status, startDate, locationId) {
     }
   }
 }
+async function count_appts(startDate, locationId) {
+  if (sessionToken === null) {
+    throw new Error("No sessionToken");
+  }
+  startDate = startDate.trim();
+  locationId = locationId.trim();
+
+  const APPT_COUNT = BASE_URL +
+    `/appointments/countByStatus/location/${locationId}?startDate=${startDate}&endDate=${startDate}`;
+
+  const url = APPT_COUNT + "&sessionToken=" + sessionToken;
+
+  try {
+    const res = await axios.get(url);
+    // console.log("get appts", res.data)
+    return res.data;
+  } catch (err) {
+    if (err.response.status === 401) {
+
+      sessionToken = await generate(); // get new value for sessionToken
+
+      let url = APPT_COUNT + "&sessionToken=" + sessionToken;
+      try {
+        const res = await axios.get(url); // try again
+        return res.data;
+      } catch (err) {
+        throw new Error(err); // second try failed
+      }
+    }
+  }
+}
 
 router.get('/appts/:startDate/:location/:locationId', function (req, res, next) {
   const { startDate, location, locationId } = req.params;
-  // get_appts(startDate, locationId).then(
-  //   (data) => {
-  //     let results = prep_results(data);
-  //     console.log(results);
-  //     results.TITLE = "Appts: " + location;
-  //     results.LOCATION = location;
-  //     results.startDate = startDate;
-  //     results.locationId = locationId;
-  //     res.render('results', results)
-  //   }
-  // );
-  const promises = [];
-  results = {};
-  for (status of ["OPEN", "CANCELLED", "COMPLETED"]) {
-    promises.push(get_appts(status, startDate, locationId));
-  }
-  Promise.all(promises).then(
-    (values) => {
-      results.OPEN = values[0].count;
-      results.CANCELLED = values[1].count;
-      results.COMPLETED = values[2].count;
-      results.PENDING = "???"
-      results.TOTAL = results.OPEN + results.COMPLETED;
-      
+  count_appts(startDate, locationId).then(
+    (data) => {
+      let results = prep_results(data);
+      console.log('/appts',results);
       results.TITLE = "Appts: " + location;
       results.LOCATION = location;
       results.startDate = startDate;
       results.locationId = locationId;
       res.render('results', results)
     }
-  )
+  );
+  // const promises = [];
+  // results = {};
+  // for (status of ["OPEN", "CANCELLED", "COMPLETED"]) {
+  //   promises.push(get_appts(status, startDate, locationId));
+  // }
+  // promises.push(count_appts(startDate, locationId));
+  // Promise.all(promises).then(
+  //   (values) => {
+  //     console.log("ALL", values[3])
+  //     results.OPEN = values[0].count;
+  //     results.CANCELLED = values[1].count;
+  //     results.COMPLETED = values[2].count;
+  //     results.PENDING = "???"
+  //     results.TOTAL = results.OPEN + results.COMPLETED;
+  //     console.log(results);
+  //     results.TITLE = "Appts: " + location;
+  //     results.LOCATION = location;
+  //     results.startDate = startDate;
+  //     results.locationId = locationId;
+  //     console.log(results);
+  //     res.render('results', results)
+  //   }
+  // )
 });
 
-// function prep_results(data) {
+function prep_results(data) {
 
-//   const results = {};
-//   // TODO: temporary PENDING = PENDING_CONFIRMATION
-//   // TODO: temporary hack
-//   if (data.PENDING_CONFIRMATION) {
-//     data.PENDING = data.PENDING_CONFIRMATION;
-//   }
-//   // console.log(data);
-//   const tags = ["OPEN", "CANCELLED", "COMPLETED", "PENDING"];
-//   for (let tag of tags) {
-//     // console.log(tag, data[tag])
-//     results[tag] = data[tag] || 0;
-//     // console.log(results[tag])
-//   }
+  const results = {};
+  
+  // console.log(data);
+  const tags = ["OPEN", "CANCELLED", "COMPLETED", "PENDING"];
+  for (let tag of tags) {
+    // console.log(tag, data[tag])
+    results[tag] = data[tag] || 0;
+    // console.log(results[tag])
+  }
 
-//   results.TOTAL = results.OPEN + results.COMPLETED;
-//   return results;
-// }
+  // results.OPEN; // += results.CONFIRMED; // TODO: needed under new version??
+  results.TOTAL = results.OPEN + results.COMPLETED;
+  return results;
+}
 
 router.get('/refresh/:startDate/:locationId', function (req, res, next) {
   const { startDate, locationId } = req.params;
   if (startDate == undefined) return;
-  // get_appts(startDate, locationId).then(
-  //   (data) => res.send(prep_results(data))
-  // );
-  const promises = [];
-  results = {};
-  for (status of ["OPEN", "CANCELLED", "COMPLETED"]) {
-    promises.push(get_appts(status, startDate, locationId));
-  }
-  Promise.all(promises).then(
-    (values) => {
-      results.OPEN = values[0].count;
-      results.CANCELLED = values[1].count;
-      results.COMPLETED = values[2].count;
-      results.PENDING = "???"
-      results.TOTAL = results.OPEN + results.COMPLETED;
-      // results.TITLE = "Appts: " + location;
-      // results.LOCATION = location;
-      // results.startDate = startDate;
-      // results.locationId = locationId;
-      res.send(results)
-    }
-  )
+  count_appts(startDate, locationId).then(
+    (data) => res.send(prep_results(data))
+  );
+  // const promises = [];
+  // results = {};
+  // for (status of ["OPEN", "CANCELLED", "COMPLETED"]) {
+  //   promises.push(get_appts(status, startDate, locationId));
+  // }
+  // Promise.all(promises).then(
+  //   (values) => {
+  //     results.OPEN = values[0].count;
+  //     results.CANCELLED = values[1].count;
+  //     results.COMPLETED = values[2].count;
+  //     results.PENDING = "???"
+  //     results.TOTAL = results.OPEN + results.COMPLETED;
+  //     // results.TITLE = "Appts: " + location;
+  //     // results.LOCATION = location;
+  //     // results.startDate = startDate;
+  //     // results.locationId = locationId;
+  //     res.send(results)
+  //   }
+  // )
 });
 
 module.exports = router;
