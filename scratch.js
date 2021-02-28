@@ -1,3 +1,4 @@
+
 const axios = require('axios');
 const BASE_URL = "https://api.timetap.com/test";
 const md5 = require('md5');
@@ -20,17 +21,20 @@ axios.get(tokenURL).then(
     (r) => {
         const sessionToken = r.data.sessionToken;
         console.log({ sessionToken });
-        getCount('COMPLETED', sessionToken);
-        getCount('OPEN', sessionToken);
-        getCount('CANCELLED', sessionToken);
-        getTest(sessionToken)
+        // getCount('COMPLETED', sessionToken);
+        // getCount('OPEN', sessionToken);
+        // getCount('CANCELLED', sessionToken);
+        // getTest(sessionToken)
+        getLocations(sessionToken);
     }
 );
 
 function getCount(status, token) {
     const theURL =
         `${BASE_URL}/appointmentList/reportCount?statusList=${status}`
-        + `&startDate=${theDate}&endDate=${theDate}&locationIdList=466979&sessionToken=${token}`;
+        + `&startDate=${theDate}&endDate=
+        
+        ${theDate}&locationIdList=466979&sessionToken=${token}`;
     
     axios.get(theURL).then(
         (v) => {
@@ -56,7 +60,19 @@ function getTest(token) {
     ).catch(e => console.log("error", e))
 }
 
-// {
-//     headers: {
-//       'Test-Header': 'test-value'
-//     }
+function getLocations(token) {
+    // /appointments/countByStatus/location/{locationId}
+    const theURL = `${BASE_URL}/locations?sessionToken=${token}`;
+
+    // const theURL = `${BASE_URL}/locations?sessionToken=${token}`;
+    
+    axios.get(theURL).then(
+        (v) => {
+            console.log(theURL);
+            // v.data.forEach(d => { 
+            //     console.log( {locationId: d.locationId, name: d.locationName})
+            // });
+            console.log('--------------');
+        }
+    ).catch(e => console.log("error", e))
+}

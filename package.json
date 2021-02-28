@@ -1,8 +1,9 @@
 {
-  "name": "htmlejsexpress",
+  "name": "mrccovid",
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "local": "APIKEY=340692  PRIVATE_KEY=25179069129544f4a568ac34bde87ff5 nodemon --watch . ./bin/www",
     "start": "nodemon --watch . ./bin/www"
   },
   "dependencies": {

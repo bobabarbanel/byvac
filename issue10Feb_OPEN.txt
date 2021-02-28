@@ -1,3 +1,0 @@
-{ token: 'st.api.api.d72434a67a884465bfd3a01b121c467e' }
-https://api.timetap.com/test/appointmentList/reportCount?statusList=OPEN&startDate=2021-02-12&endDate=2021-02-12&locationIdList=466979&sessionToken=st.api.api.d72434a67a884465bfd3a01b121c467e
-OPEN { count: 151 }

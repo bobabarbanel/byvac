@@ -1,3 +1,0 @@
-{ token: 'st.api.api.ba3cd24281bc425aa48f62f33345649a' }
-https://api.timetap.com/test/appointmentList/reportCount?statusList=CANCELLED&startDate=2021-02-12&endDate=2021-02-12&locationIdList=466979&sessionToken=st.api.api.ba3cd24281bc425aa48f62f33345649a
-CANCELLED { count: 26 }

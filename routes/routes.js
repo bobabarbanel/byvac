@@ -4,29 +4,20 @@ const axios = require('axios');
 const md5 = require('md5');
 const BASE_URL = "https://api.timetap.com/test";
 const log = console.log;
-// const apiKey = process.env.APIKEY;
-// const apiKey = "340692";
-// const private_key = process.env.PRIVATE_KEY;
-// const private_key = "25179069129544f4a568ac34bde87ff5";
-// const signature = md5("" + apiKey + private_key);
-// console.log("start", {apiKey,private_key,signature})
-// let save = {};
+
 let sessionToken = null;
 
 async function generate() {
   try {
     const apiKey = process.env.APIKEY;
-    // const apiKey = "340692";
     const private_key = process.env.PRIVATE_KEY;
-    // const private_key = "25179069129544f4a568ac34bde87ff5";
     const signature = md5("" + apiKey + private_key);
     const timestamp = Math.round(Date.now() / 1000);
     const tokenURL = `${BASE_URL}/sessionToken?apiKey=${apiKey}` +
       `&timestamp=${timestamp}&signature=${signature}`;
 
     const res = await axios.get(tokenURL);
-    sessionToken = res.data.sessionToken;
-    return res.data.sessionToken;
+    sessionToken = res.data.sessionToken; // CRITICAL sessionToken must be set here!
   } catch (err) {
     log(err.data)
     return err;
@@ -38,8 +29,8 @@ router.get('/', function (req, res, next) {
     if (sessionToken === null) {
       generate()
         .then(
-          value => {
-            sessionToken = value;
+          () => {
+            // sessionToken = value;
             res.render('index');
           }
         );
@@ -53,6 +44,7 @@ router.get('/', function (req, res, next) {
   }
 });
 
+/* OLD METHOD OF GETTING VALUES, one by one
 async function get_appts(status, startDate, locationId) {
   if (sessionToken === null) {
     sessionToken = await generate();
@@ -71,7 +63,8 @@ async function get_appts(status, startDate, locationId) {
   } catch (err) {
     if (err.response.status === 401) {
 
-      sessionToken = await generate(); // get new value for sessionToken
+      // sessionToken = 
+      await generate(); // get new value for sessionToken
 
       let url = APPT_COUNT + "&sessionToken=" + sessionToken;
       try {
@@ -83,9 +76,11 @@ async function get_appts(status, startDate, locationId) {
     }
   }
 }
+*/
+
 async function count_appts(startDate, locationId) {
   if (sessionToken === null) {
-    throw new Error("No sessionToken");
+    await generate();
   }
   startDate = startDate.trim();
   locationId = locationId.trim();
@@ -101,7 +96,8 @@ async function count_appts(startDate, locationId) {
   } catch (err) {
     if (err.response.status === 401) {
 
-      sessionToken = await generate(); // get new value for sessionToken
+      // sessionToken = 
+      await generate(); // get new value for sessionToken
 
       let url = APPT_COUNT + "&sessionToken=" + sessionToken;
       try {
@@ -126,29 +122,7 @@ router.get('/appts/:startDate/:location/:locationId', function (req, res, next) 
       res.render('results', results)
     }
   );
-  // const promises = [];
-  // results = {};
-  // for (status of ["OPEN", "CANCELLED", "COMPLETED"]) {
-  //   promises.push(get_appts(status, startDate, locationId));
-  // }
-  // promises.push(count_appts(startDate, locationId));
-  // Promise.all(promises).then(
-  //   (values) => {
-  //     console.log("ALL", values[3])
-  //     results.OPEN = values[0].count;
-  //     results.CANCELLED = values[1].count;
-  //     results.COMPLETED = values[2].count;
-  //     results.PENDING = "???"
-  //     results.TOTAL = results.OPEN + results.COMPLETED;
-  //     console.log(results);
-  //     results.TITLE = "Appts: " + location;
-  //     results.LOCATION = location;
-  //     results.startDate = startDate;
-  //     results.locationId = locationId;
-  //     console.log(results);
-  //     res.render('results', results)
-  //   }
-  // )
+  
 });
 
 function prep_results(data) {
@@ -170,25 +144,6 @@ router.get('/refresh/:startDate/:locationId', function (req, res, next) {
   count_appts(startDate, locationId).then(
     (data) => res.send(prep_results(data))
   );
-  // const promises = [];
-  // results = {};
-  // for (status of ["OPEN", "CANCELLED", "COMPLETED"]) {
-  //   promises.push(get_appts(status, startDate, locationId));
-  // }
-  // Promise.all(promises).then(
-  //   (values) => {
-  //     results.OPEN = values[0].count;
-  //     results.CANCELLED = values[1].count;
-  //     results.COMPLETED = values[2].count;
-  //     results.PENDING = "???"
-  //     results.TOTAL = results.OPEN + results.COMPLETED;
-  //     // results.TITLE = "Appts: " + location;
-  //     // results.LOCATION = location;
-  //     // results.startDate = startDate;
-  //     // results.locationId = locationId;
-  //     res.send(results)
-  //   }
-  // )
 });
 
 module.exports = router;

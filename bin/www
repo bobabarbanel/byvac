@@ -1,11 +1,15 @@
 #!/usr/bin/env node
-
+/**
+ * Environment variable dependencies.
+ */
+if(!("APIKEY" in process.env)) { console.log('no APIKEY'); process.exit()}
+if(!("PRIVATE_KEY" in process.env)) { console.log('no PRIVATE_KEY'); process.exit()}
 /**
  * Module dependencies.
  */
 
 var app = require('../app');
-var debug = require('debug')('htmlejsexpress:server');
+// var debug = require('debug')('mrccovid:server');
 var http = require('http');
 
 /**
