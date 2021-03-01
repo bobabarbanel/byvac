@@ -13,10 +13,10 @@
   <link rel='stylesheet' href='/stylesheets/excite-bike/theme.css' />
 </head>
 
- <body>
+<body>
   <container>
     <h1>COVID-19 Vaccination Center</h1>
-  <!----------------------------------------------------------------
+    <!----------------------------------------------------------------
     {
   locationId: 471236,
   name: 'Bainbridge Island - Woodward Middle School'
@@ -26,16 +26,18 @@
 { locationId: 469984, name: 'Bainbridge Mobile Vaccine Clinic' }
 { locationId: 466980, name: 'Port Hadlock/Chimacum' }
 -->
-
+    <div id="datepicker"></div>
+    <div class="helpText">Date Selected:&nbsp;<span id="selectedDate"></span></div>
+    <div class="hr"/>
     <form class="site">
-      <label ><input type="radio"  name="site" value="471236">BI - Woodward</label><br/>
-      <label ><input type="radio"  name="site" value="466979">BI - Senior Center</label><br/>
-      <label ><input type="radio"  name="site" value="469984">BI - Mobile</label><br/>
-      <label ><input type="radio" name="site" value="466980">Port Hadlock/Chimacum</label>
-      <br />
-      
+      <label><input type="radio" name="site" value="471236">&nbsp;BI - Woodward</label><br />
+      <label><input type="radio" name="site" value="466979">&nbsp;BI - Senior Center</label><br />
+      <label><input type="radio" name="site" value="469984">&nbsp;BI - Mobile</label><br />
+      <label><input type="radio" name="site" value="466980">&nbsp;Port Hadlock-Chimacum</label><br />
+      <label><input type="radio" name="site" value="all">All</label><br />
     </form>
-    <p id="pickdate">Date: <input type="text" id="datepicker"></p>
+    <button id="launchButton">Submit</button>
+    <!-- <p id="pickdate">Date: <div id="datepicker"/></p> -->
   </container>
   <script src="/js/index.js"></script>
 </body>

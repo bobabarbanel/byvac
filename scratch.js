@@ -14,7 +14,7 @@ let theDate = process.argv[2]
 if (theDate === undefined) {
     var dateFormat = require('dateformat');
     let today = new Date();
-    theDate = dateFormat(today,"yyyy-mm-dd");
+    theDate = dateFormat(today, "yyyy-mm-dd");
 }
 console.log("Date: ", theDate)
 axios.get(tokenURL).then(
@@ -25,7 +25,8 @@ axios.get(tokenURL).then(
         // getCount('OPEN', sessionToken);
         // getCount('CANCELLED', sessionToken);
         // getTest(sessionToken)
-        getLocations(sessionToken);
+        // getLocations(sessionToken);
+        get_all("2021-02-26", sessionToken);
     }
 );
 
@@ -35,7 +36,7 @@ function getCount(status, token) {
         + `&startDate=${theDate}&endDate=
         
         ${theDate}&locationIdList=466979&sessionToken=${token}`;
-    
+
     axios.get(theURL).then(
         (v) => {
             console.log(theURL);
@@ -47,10 +48,10 @@ function getCount(status, token) {
 
 function getTest(token) {
     // /appointments/countByStatus/location/{locationId}
+    let theDate = "2021-02-26";
     const theURL = `${BASE_URL}/appointments/countByStatus/location/466979?startDate=${theDate}&endDate=${theDate}&sessionToken=${token}`;
+    // const url = APPT_COUNT + "&sessionToken=" + sessionToken;
 
-    // const theURL = `${BASE_URL}/locations?sessionToken=${token}`;
-    
     axios.get(theURL).then(
         (v) => {
             console.log(theURL);
@@ -60,12 +61,12 @@ function getTest(token) {
     ).catch(e => console.log("error", e))
 }
 
-function getLocations(token) {
+function getCounts(token) {
     // /appointments/countByStatus/location/{locationId}
     const theURL = `${BASE_URL}/locations?sessionToken=${token}`;
 
     // const theURL = `${BASE_URL}/locations?sessionToken=${token}`;
-    
+
     axios.get(theURL).then(
         (v) => {
             console.log(theURL);
@@ -75,4 +76,28 @@ function getLocations(token) {
             console.log('--------------');
         }
     ).catch(e => console.log("error", e))
+}
+const allLocationIds = [471236, 466979, 469984, 466980];
+function get_all(startDate, sessionToken) {
+    let urls = allLocationIds.map((locationId) => {
+        let aURL = BASE_URL +
+            `/appointments/countByStatus/location/${locationId}?startDate=${startDate}&endDate=${startDate}`;
+
+        return aURL + "&sessionToken=" + sessionToken;
+
+    });
+    console.log(urls);
+    const promises = urls.map(url => axios.get(url));
+    const result = { COMPLETED: 0, PENDING: 0, CANCELLED: 0, OPEN: 0 };
+    Promise.all(promises).then(
+        values => {
+
+            values.forEach(({ data }) => {
+                console.log(data);
+                for (let key in data) {
+                    result[key] += data[key];
+                }
+            })
+            console.log(JSON.stringify(result, null, 4));
+        })
 }

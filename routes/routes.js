@@ -77,6 +77,7 @@ async function get_appts(status, startDate, locationId) {
   }
 }
 */
+const allLocationIds = [471236, 466979, 469984, 466980];
 
 async function count_appts(startDate, locationId) {
   if (sessionToken === null) {
@@ -84,15 +85,57 @@ async function count_appts(startDate, locationId) {
   }
   startDate = startDate.trim();
   locationId = locationId.trim();
+  if (locationId === 'all') {
+    return count_all(startDate);
+  }
+  else {
 
-  const APPT_COUNT = BASE_URL +
-    `/appointments/countByStatus/location/${locationId}?startDate=${startDate}&endDate=${startDate}`;
 
-  const url = APPT_COUNT + "&sessionToken=" + sessionToken;
 
+    const APPT_COUNT = BASE_URL +
+      `/appointments/countByStatus/location/${locationId}?startDate=${startDate}&endDate=${startDate}`;
+
+    const url = APPT_COUNT + "&sessionToken=" + sessionToken;
+
+    try {
+      const res = await axios.get(url);
+      return res.data;
+    } catch (err) {
+      if (err.response.status === 401) {
+
+        // sessionToken = 
+        await generate(); // get new value for sessionToken
+
+        let url = APPT_COUNT + "&sessionToken=" + sessionToken;
+        try {
+          const res = await axios.get(url); // try again
+          return res.data;
+        } catch (err) {
+          throw new Error(err); // second try failed
+        }
+      }
+    }
+  }
+}
+
+async function count_all(startDate) {
+  let urls = allLocationIds.map((locationId) => {
+    let aURL = BASE_URL +
+      `/appointments/countByStatus/location/${locationId}?startDate=${startDate}&endDate=${startDate}`;
+
+    return aURL + "&sessionToken=" + sessionToken;
+
+  });
   try {
-    const res = await axios.get(url);
-    return res.data;
+    const promises = urls.map(url => axios.get(url));
+    const values = await Promise.all(promises);
+    const result = { COMPLETED: 0, PENDING: 0, CANCELLED: 0, OPEN: 0 }
+    values.forEach( ({data}) => {
+      for(let key in data) {
+        result[key] += data[key];
+      }
+    })
+    return result;
   } catch (err) {
     if (err.response.status === 401) {
 
@@ -122,7 +165,7 @@ router.get('/appts/:startDate/:location/:locationId', function (req, res, next) 
       res.render('results', results)
     }
   );
-  
+
 });
 
 function prep_results(data) {

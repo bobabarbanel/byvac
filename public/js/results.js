@@ -50,12 +50,9 @@ $(function () {
     async function refreshValues() {
         let url = `/refresh/${startDate}/${locationId}`;
         const data = (await axios.get(url)).data;
-        // console.log('refreshValues', data);
         for (let tag in data) {
-            // if(tag === "PENDING_CONFIRMATION") continue; // TODO: remove when possible
             const target = $('#' + tag);
             
-            // console.log(tag, data[tag]);
             target.css("background", TRANSITION_COLOR).text(data[tag]);
 
             setTimeout(() => {
