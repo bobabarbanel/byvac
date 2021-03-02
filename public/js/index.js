@@ -9,7 +9,7 @@ $(function () {
 
     $('#datepicker').datepicker('setDate', null);
 
-    $("#selectedDate").text(today.getFullYear() + `-${month}-${day}`);
+    $("#selectedDate").text(`${today.getFullYear()}-${month}-${day}`);
 
 
     $("#datepicker").datepicker({
@@ -25,6 +25,8 @@ $(function () {
     $('.site input').on('change', handleSite);
     $("#launchButton").on('click', launch);
     function handleSite() {
+        $('.site label').css("background", "white")
+        $(this).parent().css("background", "orange")
         $("#launchButton").prop("disabled", false);
     }
     function launch() {
