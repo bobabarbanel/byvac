@@ -8,14 +8,18 @@ container {
 	align-items: center;
 	width: 1000px;
 }
-form label {
+.site {
+	margin-top: 30px;	
+	font-size: 24px;
+}
+.site label {
 	height: 20px;
 	margin: 50px;
 	color: darkblue;
 	font-size: 20px;
 }
-form {
-	margin-top: 30px;	
+.site > label:hover {
+	background-color: lightblue;
 }
 
 .results {
@@ -38,7 +42,6 @@ form {
 	margin-left: 60px;
 }
 #pickdate {
-	/* display: none; */
 	font-size: 20px;
 }
 
@@ -54,7 +57,7 @@ form {
 	margin-left: 224px;
 	align-self: flex-start;
 }
-.fa-spinner {font-size:24px}
+
 
 others {
 	background: wheat;
@@ -65,14 +68,15 @@ others {
 others > div {
 	font-size: 24px
 }
-others span {
+others > div > span {
 	margin-left: 10px;
 }
-.results_title > span {
+.countdown_timer {
 	width: 70px;
 	text-align: center;
 	font-weight: normal;
 	color: green;
+	font-size: 20px;
 }
 #selectedDate {
 	margin-top: 30px;
@@ -87,17 +91,12 @@ others span {
 #launchButton:hover {
 	background-color: lightgreen;
 }
-.site {
-	font-size: 24px;
-}
-.site > label:hover {
-	background-color: lightblue;
-}
+
 .helpText {
 	font-size: 24px;
-	font-style: bold:
+	font-style: bold;
 }
-.hr {
+.stripe {
 	background-color: purple;
 	width: 500px;
 	height: 3px;

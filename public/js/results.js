@@ -1,7 +1,7 @@
 $(function () {
     const locationId = $('locationId').text();
     const startDate = $('startDate').text();
-    const timeLeft  = $('.results_title > span');
+    const timeLeft = $('.countdown_timer');
     const timeStamp = $("#time");
 
     timeStamp.text("As of " + new Date())
@@ -18,9 +18,8 @@ $(function () {
     };
 
     $("#bar").css("width", 0.1 + "%");
-    timeLeft.text('3:00');
+    init_timer();
     draw(Date.now(), REFRESH_TIME)
-    // const tableWidth = parseInt($('table').css('width'));
     const interval = setInterval(function () {
         refreshValues();
     }, REFRESH_TIME);
@@ -28,16 +27,17 @@ $(function () {
     async function draw(start, end) {
         const indicator = setInterval(() => {
             const nowMS = Date.now() - start;
-            const now = nowMS/1000/60;
-            const min = Math.floor(3 - now );
-            let sec = Math.floor(((3 - now ) - min) * 60);
+            const now = nowMS / 1000 / 60;
+            let min = Math.floor(3 - now);
+            let sec = Math.floor(((3 - now) - min) * 60);
             sec = Math.round(sec / 5) * 5;
             if (sec < 10) sec = '0' + sec;
             if (min < 0) {
-                timeLeft.text('3:00');
-            } else {
-                timeLeft.text(`${min}:${sec}`)
+                min = 3;
+                sec = '00';
             }
+            timeLeft.html(`<i class="fas fa-history"></i>&nbsp;${min}:${sec}&nbsp;`);
+
             $("#bar").css("width", 615 * nowMS / end + "px")
 
             if (nowMS >= (.995) * end) {
@@ -52,7 +52,7 @@ $(function () {
         const data = (await axios.get(url)).data;
         for (let tag in data) {
             const target = $('#' + tag);
-            
+
             target.css("background", TRANSITION_COLOR).text(data[tag]);
 
             setTimeout(() => {
@@ -62,12 +62,16 @@ $(function () {
                 clearInterval(interval);
             }
         }
-        timeLeft.text('3:00');
-        draw(Date.now(), REFRESH_TIME * .95).then(() => timeLeft.text('3:00'));
-        
+        init_timer();
+        draw(Date.now(), REFRESH_TIME * .95).then(() => init_timer());
+
         timeStamp.css('background', TRANSITION_COLOR).text("As of " + new Date());
         setTimeout(() => {
             timeStamp.css('background', AFTER_TRANSITION_COLORS["time"]);
         }, 500)
+    }
+
+    function init_timer() {
+        timeLeft.html('<i class="fas fa-history"></i>&nbsp;3:00');
     }
 });
