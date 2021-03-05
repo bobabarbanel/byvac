@@ -40,6 +40,13 @@ container {
 	width: 610px;
 	text-align: center;
 	margin-left: 60px;
+	display: flex;
+	align-items: center;
+}
+
+.title_location {
+	align-self: center;
+	margin-left: 7%;
 }
 #pickdate {
 	font-size: 20px;
@@ -72,7 +79,7 @@ others > div > span {
 	margin-left: 10px;
 }
 .countdown_timer {
-	width: 70px;
+	width: 120px;
 	text-align: center;
 	font-weight: normal;
 	color: green;
