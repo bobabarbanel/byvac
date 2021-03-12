@@ -25,10 +25,23 @@ axios.get(tokenURL).then(
         // getCount('OPEN', sessionToken);
         // getCount('CANCELLED', sessionToken);
         // getTest(sessionToken)
-        // getLocations(sessionToken);
-        get_all("2021-02-26", sessionToken);
+        getLocations(sessionToken);
+        // get_all("2021-02-26", sessionToken);
     }
 );
+
+function getLocations(token) {
+    const theURL =
+        `${BASE_URL}/locations?sessionToken=${token}`;
+
+    axios.get(theURL).then(
+        (v) => {
+            console.log(theURL);
+            console.log(v.data);
+            console.log('--------------');
+        }
+    ).catch(e => console.log(e))
+}
 
 function getCount(status, token) {
     const theURL =
