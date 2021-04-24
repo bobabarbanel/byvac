@@ -33,7 +33,7 @@ $(function () {
         const startDate = $('#selectedDate').text();
         const location = $('.site input:checked').parent().text(); // .replace(/\//, '_'); // remove '/' in location text
         const locationId = $('.site input:checked').val();
-
+console.log({startDate, location, locationId})
         window.open(`/appts/${startDate}/${location}/${locationId}`, '_self');
     }
 });
