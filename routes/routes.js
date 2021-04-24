@@ -32,23 +32,24 @@ log("generate error",err.data)
 }
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  try {
-    if (sessionToken === null) {
-      generate("initial")
-        .then(
-          () => {
-            // sessionToken = value;
-            res.render('index');
-          }
-        );
-    } else {
-      res.render('index');
-    }
+//   try {
+//     if (sessionToken === null) {
+//       generate("initial")
+//         .then(
+//           () => {
+//             // sessionToken = value;
+//             res.render('index');
+//           }
+//         );
+//     } else {
+//       res.render('index');
+//     }
 
-  } catch (err) {
-log("/", err.data)
-    return err;
-  }
+//   } catch (err) {
+// log("/", err.data)
+//     return err;
+//   }
+res.render("index");
 });
 
 
