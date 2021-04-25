@@ -26,7 +26,7 @@ log("generate", { tokenURL });
     const res = await axios.get(tokenURL);
     sessionToken = res.data.sessionToken; // CRITICAL sessionToken must be set here!
   } catch (err) {
-log("generate error", err.data)
+console.log("generate error", {tokenURL}, err.data);
     return err;
   }
 }
@@ -56,8 +56,8 @@ router.get('/', function (req, res, next) {
 const allLocationIds = [471236, 466979, 469984, 466980];
 
 async function count_appts(startDate, locationId) {
+log("/appts", "===", { startDate, sessionToken, locationId }, "===")
   if (sessionToken === null) {
-log({ sessionToken, startDate, locationId })
     await generate("count_appts");
   }
   startDate = startDate.trim();
@@ -77,15 +77,16 @@ log("count_appts", { url })
       return res.data;
     } catch (err) {
       if (err.response.status === 401) {
-log("count_appts", "401")
+log("count_appts", "401");
         // sessionToken = 
         await generate("401"); // get new value for sessionToken
-log("count_appts", { sessionToken })
+log("count_appts after generate 401", { sessionToken });
         let url = APPT_COUNT + "&sessionToken=" + sessionToken;
         try {
           const res = await axios.get(url); // try again
           return res.data;
         } catch (err) {
+          console.log("generate error", {url}, err.response.status)
           throw new Error(err); // second try failed
         }
       }
@@ -130,7 +131,7 @@ async function count_all(startDate) {
 
 router.get('/appts/:startDate/:location/:locationId', function (req, res) {
   const { startDate, location, locationId } = req.params;
-log("/appts", "===", { startDate, location, locationId }, "===")
+
   count_appts(startDate.trim(), locationId.trim())
     .then(
       (data) => {
