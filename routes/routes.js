@@ -4,7 +4,7 @@ const axios = require('axios');
 const md5 = require('md5');
 const DEBUG = false;
 function log(...args) {
-  if(DEBUG) {
+  if (DEBUG) {
     console.log(...args);
   }
 }
@@ -18,38 +18,38 @@ log("generate(" + tag + ") called")
     const private_key = process.env.PRIVATE_KEY;
     const signature = md5("" + apiKey + private_key);
     const timestamp = Math.round(Date.now() / 1000);
-log("generate", {apiKey, private_key, signature, timestamp});
+log("generate", { apiKey, private_key, signature, timestamp });
 
     const tokenURL = `${BASE_URL}/sessionToken?apiKey=${apiKey}` +
       `&timestamp=${timestamp}&signature=${signature}`;
-log("generate", {tokenURL});
+log("generate", { tokenURL });
     const res = await axios.get(tokenURL);
     sessionToken = res.data.sessionToken; // CRITICAL sessionToken must be set here!
   } catch (err) {
-log("generate error",err.data)
+log("generate error", err.data)
     return err;
   }
 }
 /* GET home page. */
 router.get('/', function (req, res, next) {
-//   try {
-//     if (sessionToken === null) {
-//       generate("initial")
-//         .then(
-//           () => {
-//             // sessionToken = value;
-//             res.render('index');
-//           }
-//         );
-//     } else {
-//       res.render('index');
-//     }
+  //   try {
+  //     if (sessionToken === null) {
+  //       generate("initial")
+  //         .then(
+  //           () => {
+  //             // sessionToken = value;
+  //             res.render('index');
+  //           }
+  //         );
+  //     } else {
+  //       res.render('index');
+  //     }
 
-//   } catch (err) {
-// log("/", err.data)
-//     return err;
-//   }
-res.render("index");
+  //   } catch (err) {
+  // log("/", err.data)
+  //     return err;
+  //   }
+  res.render("index");
 });
 
 
@@ -57,7 +57,7 @@ const allLocationIds = [471236, 466979, 469984, 466980];
 
 async function count_appts(startDate, locationId) {
   if (sessionToken === null) {
-log({sessionToken, startDate, locationId})
+log({ sessionToken, startDate, locationId })
     await generate("count_appts");
   }
   startDate = startDate.trim();
@@ -71,7 +71,7 @@ log({sessionToken, startDate, locationId})
       `/appointments/countByStatus/location/${locationId}?startDate=${startDate}&endDate=${startDate}`;
 
     const url = APPT_COUNT + "&sessionToken=" + sessionToken;
-log("count_appts", {url})
+log("count_appts", { url })
     try {
       const res = await axios.get(url);
       return res.data;
@@ -80,7 +80,7 @@ log("count_appts", {url})
 log("count_appts", "401")
         // sessionToken = 
         await generate("401"); // get new value for sessionToken
-log("count_appts", {sessionToken})
+log("count_appts", { sessionToken })
         let url = APPT_COUNT + "&sessionToken=" + sessionToken;
         try {
           const res = await axios.get(url); // try again
@@ -105,8 +105,8 @@ async function count_all(startDate) {
     const promises = urls.map(url => axios.get(url));
     const values = await Promise.all(promises);
     const result = { COMPLETED: 0, PENDING: 0, CANCELLED: 0, OPEN: 0 }
-    values.forEach( ({data}) => {
-      for(let key in data) {
+    values.forEach(({ data }) => {
+      for (let key in data) {
         result[key] += data[key];
       }
     })
@@ -128,27 +128,29 @@ async function count_all(startDate) {
   }
 }
 
-router.get('/appts/:startDate/:location/:locationId', function (req, res, next) {
+router.get('/appts/:startDate/:location/:locationId', function (req, res) {
   const { startDate, location, locationId } = req.params;
 log("/appts", "===", { startDate, location, locationId }, "===")
-  count_appts(startDate.trim(), locationId.trim()).then(
-    (data) => {
-      let results = prep_results(data);
-      results.TITLE = "Appts: " + location;
-      results.LOCATION = location.trim();
-      results.startDate = startDate.trim();
-      results.locationId = locationId.trim();
-      res.render('results', results)
-    }
-  ).catch(err => {
-    console.log(err);
-    console.log("/appts", "===", { startDate, location, locationId }, "===");
-  })
+  count_appts(startDate.trim(), locationId.trim())
+    .then(
+      (data) => {
+        let results = prep_results(data);
+        results.TITLE = "Appts: " + location;
+        results.LOCATION = location.trim();
+        results.startDate = startDate.trim();
+        results.locationId = locationId.trim();
+        res.render('results', results)
+      }
+    )
+    .catch(err => {
+      console.log(err);
+      console.log("/appts", "===", { startDate, location, locationId }, "===");
+    })
 
 });
 
 function prep_results(data) {
-
+log("prep_results", data);
   const results = {};
 
   const tags = ["OPEN", "CANCELLED", "COMPLETED", "PENDING"];
