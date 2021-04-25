@@ -48,7 +48,8 @@ $(function () {
     }
     // function rand() { return  Math.floor(Math.random()*20); }
     async function refreshValues() {
-        let url = `/refresh/${startDate}/${locationId}`;
+
+        let url = `/refresh/${startDate.trim()}/${locationId.trim()}`;
         const data = (await axios.get(url)).data;
         for (let tag in data) {
             const target = $('#' + tag);
