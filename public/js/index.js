@@ -30,10 +30,10 @@ $(function () {
         $("#launchButton").prop("disabled", false);
     }
     function launch() {
-        const startDate = $('#selectedDate').text();
-        const location = $('.site input:checked').parent().text(); // .replace(/\//, '_'); // remove '/' in location text
+        const startDate = $('#selectedDate').text().trim();
+        const location = $('.site input:checked').parent().text().trim(); // .replace(/\//, '_'); // remove '/' in location text
         const locationId = $('.site input:checked').val();
-console.log({startDate, location, locationId})
+// console.log({startDate, location, locationId})
         window.open(`/appts/${startDate}/${location}/${locationId}`, '_self');
     }
 });
