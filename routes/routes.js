@@ -131,16 +131,19 @@ async function count_all(startDate) {
 router.get('/appts/:startDate/:location/:locationId', function (req, res, next) {
   const { startDate, location, locationId } = req.params;
 log("/appts", "===", { startDate, location, locationId }, "===")
-  count_appts(startDate, locationId).then(
+  count_appts(startDate.trim(), locationId.trim()).then(
     (data) => {
       let results = prep_results(data);
       results.TITLE = "Appts: " + location;
-      results.LOCATION = location;
-      results.startDate = startDate;
-      results.locationId = locationId;
+      results.LOCATION = location.trim();
+      results.startDate = startDate.trim();
+      results.locationId = locationId.trim();
       res.render('results', results)
     }
-  );
+  ).catch(err => {
+    console.log(err);
+    console.log("/appts", "===", { startDate, location, locationId }, "===");
+  })
 
 });
 
