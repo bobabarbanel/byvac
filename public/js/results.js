@@ -1,6 +1,6 @@
 $(function () {
-    const locationId = $('locationId').text();
-    const startDate = $('startDate').text();
+    const locationId = $('locationId').text().trim();
+    const startDate = $('startDate').text().trim();
     const timeLeft = $('.countdown_timer');
     const timeStamp = $("#time");
 
