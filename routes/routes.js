@@ -146,10 +146,10 @@ log("prep_results", data);
   return results;
 }
 
-router.get('/refresh/:startDate/:locationId', function (req, res) {
+router.get('/refresh/:startDate/:locationId', function (req, res) { // Consider error handling here??
   const { startDate, locationId } = req.params;
   if (startDate == undefined) return;
-  count_appts(startDate, locationId).then(
+  count_appts(startDate.trim(), locationId.trim()).then(
     (data) => res.send(prep_results(data))
   );
 });
