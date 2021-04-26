@@ -31,24 +31,7 @@ console.log("generate error", {tokenURL}, err.data);
   }
 }
 /* GET home page. */
-router.get('/', function (req, res, next) {
-  //   try {
-  //     if (sessionToken === null) {
-  //       generate("initial")
-  //         .then(
-  //           () => {
-  //             // sessionToken = value;
-  //             res.render('index');
-  //           }
-  //         );
-  //     } else {
-  //       res.render('index');
-  //     }
-
-  //   } catch (err) {
-  // log("/", err.data)
-  //     return err;
-  //   }
+router.get('/', function (ignore, res) {
   res.render("index");
 });
 
@@ -163,7 +146,7 @@ log("prep_results", data);
   return results;
 }
 
-router.get('/refresh/:startDate/:locationId', function (req, res, next) {
+router.get('/refresh/:startDate/:locationId', function (req, res) {
   const { startDate, locationId } = req.params;
   if (startDate == undefined) return;
   count_appts(startDate, locationId).then(
