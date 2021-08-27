@@ -19,10 +19,13 @@
 
 <body>
     <container>
-        <h1 class="results_title">
+        <div class="results_title">
             <span class="countdown_timer"></span>&nbsp;&nbsp;
-            <span class="title_location"><%= LOCATION %><br/><%= startDate %></span>
-        </h1>
+            <span class="title_location">
+                <h1><%= LOCATION %><br />
+                    <%= startDate %></h1>
+            </span>
+        </div>
         <data style="display: none">
             <locationId>
                 <%= locationId %>
@@ -36,15 +39,67 @@
         <table class="results">
             <tbody>
                 <tr>
-                    <th>Open</th>
+                    <th class="label">Open</th>
                     <td style="background: pink;" id="OPEN" );>
-                        <%= OPEN %>
+                        <pair><span class="num">
+                                <%= OPEN.M + OPEN.P + OPEN.J %>
+                            </span>
+                            <vacs>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th class="right">
+                                                <%= OPEN.M %>
+                                            </th>
+                                            <th>Mod</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="right">
+                                                <%= OPEN.P %>
+                                            </th>
+                                            <th>Pfi</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="right">
+                                                <%= OPEN.J %>
+                                            </th>
+                                            <th>Jan</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </vacs>
+                        </pair>
                     </td>
                 </tr>
                 <tr>
-                    <th>Completed</th>
+                    <th class="label">Completed</th>
                     <td id="COMPLETED">
-                        <%= COMPLETED %>
+                        <pair><span class="num">
+                                <%= COMPLETED.M + COMPLETED.P + COMPLETED.J %>
+                            </span>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th class="right">
+                                            <%= COMPLETED.M %>
+                                        </th>
+                                        <th>Mod</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="right">
+                                            <%= COMPLETED.P %>
+                                        </th>
+                                        <th>Pfi</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="right">
+                                            <%= COMPLETED.J %>
+                                        </th>
+                                        <th>Jan</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </pair>
                     </td>
                 </tr>
                 <tr>
@@ -56,15 +111,55 @@
                     </th>
                 </tr>
                 <tr class="titlerow">
-                    <th>Total</th>
+                    <th class="label">Total</th>
                     <td id="TOTAL">
-                        <%= TOTAL %>
+                        <pair><span class="num">
+                                <%= OPEN.M + OPEN.P + OPEN.J + COMPLETED.M + COMPLETED.P + COMPLETED.J %>
+                            </span>
+                            <!-- <div>&nbsp;<%= OPEN.M + COMPLETED.M %>&nbsp;Mod&nbsp;</div>
+                            <div>&nbsp;<%= OPEN.P + COMPLETED.P %>&nbsp;Pfi&nbsp;</div> -->
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th class="right">
+                                            <%= OPEN.M + COMPLETED.M %>
+                                        </th>
+                                        <th>Mod</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="right">
+                                            <%= OPEN.P + COMPLETED.P %>
+                                        </th>
+                                        <th>Pfi</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="right">
+                                            <%= OPEN.J + COMPLETED.J %>
+                                        </th>
+                                        <th>Jan</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </vacs>
+                        </pair>
                     </td>
                 </tr>
         </table>
         <others>
-            <div>Pending:<span id="PENDING">&nbsp;<%= PENDING %></span></div>
-            <div>Cancelled:<span id="CANCELLED">&nbsp;<%= CANCELLED %></span></div>
+            <div>Pending:<span id="PENDING">&nbsp;<%= PENDING.M + PENDING.P + PENDING.J %>&nbsp;</span>
+                <span class="tiny">(
+                    <div><%= PENDING.P %>&nbsp;P</div>,&nbsp;
+                    <div><%= PENDING.M %>&nbsp;M</div>,&nbsp;
+                    <div><%= PENDING.J %>&nbsp;J</div>
+                )</span>
+            </div>
+            <div>Cancelled:<span id="CANCELLED">&nbsp;<%= CANCELLED.M + CANCELLED.P + CANCELLED.J %>&nbsp;</span>
+                <span class="tiny">(
+                    <div><%= CANCELLED.P %>&nbsp;P</div>,&nbsp;
+                    <div><%= CANCELLED.M %>&nbsp;M</div>,&nbsp;
+                    <div><%= CANCELLED.J %>&nbsp;J</div>
+                )</span>
+            </div>
         </others>
         <p id="time"></p>
     </container>

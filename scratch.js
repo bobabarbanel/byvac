@@ -3,6 +3,8 @@ const axios = require('axios');
 const BASE_URL = "https://api.timetap.com/test";
 const md5 = require('md5');
 
+let vacStatus;
+
 const apiKey = "340692";
 const private_key = "25179069129544f4a568ac34bde87ff5";
 const signature = md5(apiKey + private_key);
@@ -16,16 +18,18 @@ if (theDate === undefined) {
     let today = new Date();
     theDate = dateFormat(today, "yyyy-mm-dd");
 }
-console.log("Date: ", theDate)
+// console.log("Date: ", theDate)
 axios.get(tokenURL).then(
     (r) => {
         const sessionToken = r.data.sessionToken;
-        console.log({ sessionToken });
+        // console.log({ sessionToken });
+        getTest(sessionToken, '2021-08-28');
+        // getAppts(sessionToken);
         // getCount('COMPLETED', sessionToken);
         // getCount('OPEN', sessionToken);
         // getCount('CANCELLED', sessionToken);
-        // getTest(sessionToken)
-        getLocations(sessionToken);
+        // getAppts(sessionToken,'2021-08-28')
+        // getLocations(sessionToken);
         // get_all("2021-02-26", sessionToken);
     }
 );
@@ -37,7 +41,23 @@ function getLocations(token) {
     axios.get(theURL).then(
         (v) => {
             console.log(theURL);
-            console.log(v.data);
+            v.data.forEach(
+                loc => console.log(loc.locationId, loc.locationName)
+            )
+            console.log('--------------');
+        }
+    ).catch(e => console.log(e))
+}
+
+function getAppts(token, clinicDate) {
+    const theURL =
+        // `${BASE_URL}/reports/category&sessionToken=${token}`;
+        `${BASE_URL}/appointments/report?startDate=${clinicDate}endDate=${clinicDate}&sessionToken=${token}`;
+    console.log(theURL)
+    axios.get(theURL).then(
+        (v) => {
+            console.log(theURL);
+            console.log(status, JSON.parse(v));
             console.log('--------------');
         }
     ).catch(e => console.log(e))
@@ -59,20 +79,51 @@ function getCount(status, token) {
     ).catch(e => console.log(e))
 }
 
-function getTest(token) {
+function getTest(token, theDate) {
     // /appointments/countByStatus/location/{locationId}
-    let theDate = "2021-02-26";
-    const theURL = `${BASE_URL}/appointments/countByStatus/location/466979?startDate=${theDate}&endDate=${theDate}&sessionToken=${token}`;
+    // let theDate = "2021-08-28";
+    const theURL =
+        `${BASE_URL}/appointments/report/?locationIdList=466979&startDate=${theDate}&endDate=${theDate}&sessionToken=${token}`;
     // const url = APPT_COUNT + "&sessionToken=" + sessionToken;
-
+    initializeVS();
+    console.log("start get");
     axios.get(theURL).then(
         (v) => {
             console.log(theURL);
-            console.log('countByStatus', v.data);
+            v.data.forEach(
+                patient => pivot(patient)
+            );
+            console.log(JSON.stringify(vacStatus, null, 4));
             console.log('--------------');
         }
-    ).catch(e => console.log("error", e))
+    ).catch(e => console.log("error", e));
+
+    
+    function initializeVS() {
+        vacStatus =
+        {
+            CANCELLED: {
+            },
+            OPEN: {
+            },
+            COMPLETED: {
+            }
+        }
+    }
+    function pivot({ status, reason }) {
+        const vaccine = reason.reasonDesc.split(/\s/)[0]
+        // console.log(status, vaccine)
+        const vac = vacStatus[status];
+        if (vac[vaccine]) {
+            vac[vaccine]++;
+        }
+        else {
+            vac[vaccine] = 1;
+        }
+    }
 }
+
+
 
 function getCounts(token) {
     // /appointments/countByStatus/location/{locationId}

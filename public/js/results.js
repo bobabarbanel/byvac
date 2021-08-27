@@ -69,7 +69,7 @@ $(function () {
         timeStamp.css('background', TRANSITION_COLOR).text("As of " + new Date());
         setTimeout(() => {
             timeStamp.css('background', AFTER_TRANSITION_COLORS["time"]);
-        }, 500)
+        }, 500);
     }
 
     function init_timer() {

@@ -1,12 +1,12 @@
 body {
 	padding: 10px;
-	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	font: 20px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	width: 1000px;
+	/* width: 80%; */
 }
 .site {
 	margin-top: 30px;	
@@ -23,12 +23,12 @@ container {
 }
 
 .results {
-	width: 610px;
+	width: 80%;
 }
-.results th {
+/* .results th {
 	font-size: 36px;
 	width: 50%;
-}
+} */
 .results td {
 	font-size: 108px;
 	font-weight: bold;
@@ -37,16 +37,17 @@ container {
 }
 .results_title {
 	background: tan;
-	width: 610px;
-	text-align: center;
-	margin-left: 60px;
+	width: 80%;
+	/* text-align: center; */
+	/* margin-left: 60px; */
 	display: flex;
 	align-items: center;
 }
 
 .title_location {
-	align-self: center;
-	margin-left: 7%;
+	/* align-self: center;
+	margin-left: 7%; */
+	margin: 0 auto;
 }
 #pickdate {
 	font-size: 20px;
@@ -68,7 +69,7 @@ container {
 
 others {
 	background: wheat;
-	width: 610px;
+	width: 80%;
 	display: flex;
 	justify-content: space-around;
 }
@@ -107,4 +108,31 @@ others > div > span {
 	background-color: purple;
 	width: 500px;
 	height: 3px;
+}
+
+
+pair {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	font-family: 'Courier New', Courier, monospace;
+}
+pair table {
+	margin-left: 20px;
+	font-size: .2em;
+}
+.label {
+	width: 50%;
+	font-size: 36px;
+}
+.right {
+	text-align:right;
+	width: 2em;
+} 
+.num {
+	width: 1.8em;
+}
+.tiny {
+	display: flex;
+	font-size: 15px;
 }
