@@ -9,7 +9,6 @@ container {
 	/* width: 80%; */
 }
 
-
 .results {
 	width: 80%;
 }
@@ -38,9 +37,6 @@ container {
 	margin: 0 auto;
 }
 
-.results td {
-	transition: all 1s ease;
-}
 bar {
 	display: block;
 	height: 10px;
@@ -51,15 +47,15 @@ bar {
 	align-self: center;
 }
 
-
 others {
 	background: wheat;
 	width: 80%;
 	display: flex;
 	justify-content: space-around;
+	margin-top: 1em;
 }
 others > div {
-	font-size: 24px
+	font-size: 2em;
 }
 others > div > span {
 	margin-left: 10px;
@@ -79,22 +75,20 @@ others > div > span {
 
 pair {
 	display: flex;
+	justify-content: space-between;
 	flex-direction: row;
 	align-items: center;
-	font-family: 'Courier New', Courier, monospace;
+	font-family: "Courier New", Courier, monospace;
 }
-pair table {
-	margin-left: 20px;
-	font-size: .2em;
-}
+
 .label {
 	width: 50%;
 	font-size: 36px;
 }
 .right {
-	text-align:right;
+	text-align: right;
 	width: 2em;
-} 
+}
 .num {
 	width: 1.8em;
 }

@@ -172,10 +172,11 @@ function initializeVS() {
     OPEN: {},
     COMPLETED: {},
     PENDING: {},
-    CANCELLED: {}
+    CANCELLED: {},
+    NO_SHOW: {}
   }
   for (let key in vacStatus) {
-    for (let c of ['M', 'P', 'J'])
+    for (let c of ['M', 'P', 'J'])  // vaccine types
       vacStatus[key][c] = 0;
   }
 }
@@ -183,7 +184,7 @@ function pivot({ status, reason }) {
   const vaccineChar = reason.reasonDesc
     .split(/\s/)[0]
     .charAt(0); // 1st char of 1st string
-  // console.log(status, vaccineChar)
+  log('pivot', status, vaccineChar)
 
   vacStatus[status][vaccineChar]++;
 }

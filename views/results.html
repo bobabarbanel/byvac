@@ -14,7 +14,132 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <style>
+        div.horiz {
+            display: flex;
+            align-items: center;
+        }
 
+        .label {
+            width: 50%;
+            font-weight: bold;
+            font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+            text-align: left;
+            font-size: 42px;
+        }
+
+        div.vert {
+            display: flex;
+            flex-direction: column;
+            align-items: right;
+            font-weight: bold;
+        }
+
+        div.bigval {
+            font-size: 108px;
+            font-weight: bold;
+            margin-right: 50px;
+            text-align: right;
+            margin-left: 100px;
+            /* border: 1px solid blue; */
+        }
+
+        div.smallval {
+            font-size: 1em;
+            font-family: "Courier New", Courier, monospace;
+            margin-left: 1em;
+            align-self: right;
+            text-align: right;
+            width: 2em;
+        }
+
+        div.smalllabel {
+            font-size: 1em;
+            font-family: "Courier New", Courier, monospace;
+            margin-left: .5em;
+            align-self: right;
+            text-align: right;
+            width: 2em;
+        }
+
+        hr {
+            width: 80%;
+            height: 2px;
+        }
+
+        div.horiz_always {
+            display: flex;
+            align-items: center;
+        }
+
+        .padr {
+            /* padding-right: 40px; */
+            justify-content: space-around;
+        }
+
+        @media (orientation: portrait) {
+            pair {
+                flex-direction: column;
+                justify-content: flex-start;
+            }
+            .horiz.padr {
+                width: 100%;
+                padding: 25px;
+                align-self: left;
+            }
+
+            div.horiz {
+                flex-direction: column;
+                /* justify-content: space-evenly; */
+            }
+
+            div.vert {
+                flex-direction: row;
+                justify-content: space-around;
+            }
+
+            .label {
+                margin-top: 0.2em;
+                font-size: 100px;
+                text-align: center;
+                align-self: center;
+                width: 80%;
+            }
+
+            div.bigval {
+                font-size: 160px;
+                text-align: right;
+                /* border: 1px solid red; */
+            }
+
+            div.smallval,
+            div.smalllabel {
+                font-size: 2em;
+                font-family: "Courier New", Courier, monospace;
+                text-align: right;
+                /* width: 3em; */
+            }
+
+            .vert.byvax {
+                width: 60%;
+                padding-right: 20px;
+                margin-left: -20px;
+            }
+
+            .tiny {
+                font-size: 30px;
+            }
+
+            .results_title {
+                font-size: 24px;
+            }
+
+            .time {
+                font-size: 28px;
+            }
+            
+        }
+    </style>
 </head>
 
 <body>
@@ -42,115 +167,104 @@
 
         <bar></bar>
 
-        <table class="results">
-            <tbody>
-                <tr>
-                    <th class="label">Open</th>
-                    <td style="background: pink;" id="OPEN" );>
-                        <pair><span class="num">
-                                <%= OPEN.M + OPEN.P + OPEN.J %>
-                            </span>
-                            <vacs>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <th class="right">
-                                                <%= OPEN.M %>
-                                            </th>
-                                            <th>Mod</th>
-                                        </tr>
-                                        <tr>
-                                            <th class="right">
-                                                <%= OPEN.P %>
-                                            </th>
-                                            <th>Pfi</th>
-                                        </tr>
-                                        <tr>
-                                            <th class="right">
-                                                <%= OPEN.J %>
-                                            </th>
-                                            <th>Jan</th>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </vacs>
-                        </pair>
-                    </td>
-                </tr>
-                <tr>
-                    <th class="label">Completed</th>
-                    <td id="COMPLETED">
-                        <pair><span class="num">
-                                <%= COMPLETED.M + COMPLETED.P + COMPLETED.J %>
-                            </span>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <th class="right">
-                                            <%= COMPLETED.M %>
-                                        </th>
-                                        <th>Mod</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="right">
-                                            <%= COMPLETED.P %>
-                                        </th>
-                                        <th>Pfi</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="right">
-                                            <%= COMPLETED.J %>
-                                        </th>
-                                        <th>Jan</th>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </pair>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <hr>
-                    </th>
-                    <th>
-                        <hr>
-                    </th>
-                </tr>
-                <tr class="titlerow">
-                    <th class="label">Total</th>
-                    <td id="TOTAL">
-                        <pair><span class="num">
-                                <%= OPEN.M + OPEN.P + OPEN.J + COMPLETED.M + COMPLETED.P + COMPLETED.J %>
-                            </span>
-                            <!-- <div>&nbsp;<%= OPEN.M + COMPLETED.M %>&nbsp;Mod&nbsp;</div>
-                            <div>&nbsp;<%= OPEN.P + COMPLETED.P %>&nbsp;Pfi&nbsp;</div> -->
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <th class="right">
-                                            <%= OPEN.M + COMPLETED.M %>
-                                        </th>
-                                        <th>Mod</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="right">
-                                            <%= OPEN.P + COMPLETED.P %>
-                                        </th>
-                                        <th>Pfi</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="right">
-                                            <%= OPEN.J + COMPLETED.J %>
-                                        </th>
-                                        <th>Jan</th>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </vacs>
-                        </pair>
-                    </td>
-                </tr>
-        </table>
+        <pair>
+            <div class="label">Open</div>
+            <div class="horiz padr" style="background-color: pink;" id="OPEN">
+
+                <div class="bigval">
+                    <%= OPEN.M + OPEN.P + OPEN.J %>
+                </div>
+
+                <div class="vert byax">
+                    <div class="horiz_always">
+                        <div class="smallval">
+                            <%= OPEN.M %>
+                        </div>
+                        <div class="smalllabel">Mod</div>
+                    </div>
+                    <div class="horiz_always">
+                        <div class="smallval">
+                            <%= OPEN.P %>
+                        </div>
+                        <div class="smalllabel">Pfi</div>
+                    </div>
+                    <div class="horiz_always">
+                        <div class="smallval">
+                            <%= OPEN.J %>
+                        </div>
+                        <div class="smalllabel">Jan</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </pair>
+        <pair>
+            <div class="label">Completed</div>
+            <div class="horiz padr" style="background-color: rgb(250, 237, 124);" id="COMPLETED">
+
+                <div class="bigval">
+                    <%= COMPLETED.M + COMPLETED.P + COMPLETED.J %>
+                </div>
+
+                <div class="vert byvax">
+                    <div class="horiz_always">
+                        <div class="smallval">
+                            <%= COMPLETED.M %>
+                        </div>
+                        <div class="smalllabel">Mod</div>
+                    </div>
+                    <div class="horiz_always">
+                        <div class="smallval">
+                            <%= COMPLETED.P %>
+                        </div>
+                        <div class="smalllabel">Pfi</div>
+                    </div>
+                    <div class="horiz_always">
+                        <div class="smallval">
+                            <%= COMPLETED.J %>
+                        </div>
+                        <div class="smalllabel">Jan</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </pair>
+        <hr>
+        <pair>
+            <div class="label">Total</div>
+            <div class="horiz padr" style="background-color: rgb(156, 201, 222);" id="TOTAL">
+
+                <div class="bigval">
+                    <%= OPEN.M + OPEN.P + OPEN.J + COMPLETED.M + COMPLETED.P + COMPLETED.J %>
+                </div>
+
+                <div class="vert byvax">
+                    <div class="horiz_always">
+                        <div class="smallval">
+                            <%= OPEN.M + COMPLETED.M %>
+                        </div>
+                        <div class="smalllabel">Mod</div>
+                    </div>
+                    <div class="horiz_always">
+                        <div class="smallval">
+                            <%= OPEN.P + COMPLETED.P %>
+                        </div>
+                        <div class="smalllabel">Pfi</div>
+                    </div>
+                    <div class="horiz_always">
+                        <div class="smallval">
+                            <%= OPEN.J + COMPLETED.J %>
+                        </div>
+                        <div class="smalllabel">Jan</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </pair>
+        <!-- </table> -->
         <others>
             <div>Pending:<span id="PENDING">&nbsp;<%= PENDING.M + PENDING.P + PENDING.J %>&nbsp;</span>
                 <span class="tiny">(
