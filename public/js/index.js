@@ -22,11 +22,11 @@ $(function () {
         }
     });
 
-    $('.site input').on('change', handleSite);
+    $('li input').on('change', handleSite);
     $('button').on('click', launch);
     function handleSite() {
-        $('.site label').css("background", "white")
-        $(this).parent().css("background", "orange")
+        $('ul li').css("background", "white");
+        $(this).parent().css("background", "orange");
         $("#launchButton").prop("disabled", false);
     }
     function launch() {

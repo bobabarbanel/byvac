@@ -18,30 +18,32 @@ loading {
 #datepicker {
 	font-size: 1.8em;
 }
-form {
+ul {
 	margin-top: 2em;
 	font-size: 1.8em;
+	list-style-type: none;
 }
-form label {
-	height: 20px;
-	margin-bottom: 50px;
+ul li {
+	height: 70px;
+	margin-bottom: 30px;
 	color: darkblue;
-	font-size: 1.5em;
+	font-size: 1.2em;
 }
-.site input[type="radio"] {
-	transform: scale(2);
+ul input {
+	transform: scale(3) translate(0, -4px);;
 }
 
-.site > label:hover {
+ul li:hover {
 	background-color: lightblue;
 }
+
 
 button {
 	font-size: 3em;
 	padding: 5px;
 	margin-top: 1em;
 }
-#launchButton:hover {
+button:hover {
 	background-color: lightgreen;
 }
 
