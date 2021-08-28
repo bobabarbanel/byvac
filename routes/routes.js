@@ -173,7 +173,7 @@ function initializeVS() {
     COMPLETED: {},
     PENDING: {},
     CANCELLED: {},
-    NO_SHOW: {}
+    // NO_SHOW: {}
   }
   for (let key in vacStatus) {
     for (let c of ['M', 'P', 'J'])  // vaccine types
@@ -185,7 +185,7 @@ function pivot({ status, reason }) {
     .split(/\s/)[0]
     .charAt(0); // 1st char of 1st string
   log('pivot', status, vaccineChar)
-
+  if(status === 'NO_SHOW') { status = 'CANCELLED'; } // treat no-shows as cancelled
   vacStatus[status][vaccineChar]++;
 }
 

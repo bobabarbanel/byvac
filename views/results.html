@@ -82,6 +82,7 @@
                 flex-direction: column;
                 justify-content: flex-start;
             }
+
             .horiz.padr {
                 width: 100%;
                 padding: 25px;
@@ -128,6 +129,7 @@
 
             .tiny {
                 font-size: 30px;
+                margin-left: 30px;
             }
 
             .results_title {
@@ -137,7 +139,11 @@
             .time {
                 font-size: 28px;
             }
-            
+
+            others>div>span {
+                margin-left: 3px;
+            }
+
         }
     </style>
 </head>
@@ -280,7 +286,8 @@
                     )
                 </span>
             </div>
-            <div>Cancelled:<span id="CANCELLED">&nbsp;<%= CANCELLED.M + CANCELLED.P + CANCELLED.J %>&nbsp;</span>
+            <div>Cancelled/No_Show:<span id="CANCELLED">&nbsp;<%= CANCELLED.M + CANCELLED.P + CANCELLED.J %>
+                        &nbsp;</span>
                 <span class="tiny">(
                     <div>
                         <%= CANCELLED.P %>&nbsp;P
