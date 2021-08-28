@@ -23,7 +23,7 @@ $(function () {
     });
 
     $('.site input').on('change', handleSite);
-    $("#launchButton").on('click', launch);
+    $('button').on('click', launch);
     function handleSite() {
         $('.site label').css("background", "white")
         $(this).parent().css("background", "orange")
@@ -33,7 +33,8 @@ $(function () {
         const startDate = $('#selectedDate').text().trim();
         const location = $('.site input:checked').parent().text().trim(); // .replace(/\//, '_'); // remove '/' in location text
         const locationId = $('.site input:checked').val();
-// console.log({startDate, location, locationId})
-        window.open(`/appts/${startDate}/${location}/${locationId}`, '_self');
+        $('container').hide();
+        $('loading').show();
+        window.open(`/appts/${startDate}/${encodeURI(location)}/${locationId}`, '_self');
     }
 });

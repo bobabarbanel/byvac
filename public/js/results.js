@@ -1,6 +1,7 @@
 $(function () {
     const locationId = $('locationId').text().trim();
     const startDate = $('startDate').text().trim();
+    const location = $('location').text().trim();
     const timeLeft = $('.countdown_timer');
     const timeStamp = $("#time");
 
@@ -38,7 +39,7 @@ $(function () {
             }
             timeLeft.html(`<i class="fas fa-history"></i>&nbsp;${min}:${sec}&nbsp;`);
 
-            $("#bar").css("width", 615 * nowMS / end + "px")
+            $("bar").css("width", (80 - ((3-now)*80/3)) + "%")
 
             if (nowMS >= (.995) * end) {
                 clearInterval(indicator);
@@ -49,7 +50,7 @@ $(function () {
     // function rand() { return  Math.floor(Math.random()*20); }
     async function refreshValues() {
 
-        let url = `/refresh/${startDate.trim()}/${locationId.trim()}`;
+        let url = `/refresh/${startDate}/${encodeURI(location)}/${locationId}`;
         const data = (await axios.get(url)).data;
         for (let tag in data) {
             const target = $('#' + tag);

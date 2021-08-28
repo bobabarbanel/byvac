@@ -8,19 +8,7 @@ container {
 	align-items: center;
 	/* width: 80%; */
 }
-.site {
-	margin-top: 30px;	
-	font-size: 24px;
-}
-.site label {
-	height: 20px;
-	margin: 50px;
-	color: darkblue;
-	font-size: 20px;
-}
-.site > label:hover {
-	background-color: lightblue;
-}
+
 
 .results {
 	width: 80%;
@@ -38,7 +26,7 @@ container {
 .results_title {
 	background: tan;
 	width: 80%;
-	/* text-align: center; */
+	text-align: center;
 	/* margin-left: 60px; */
 	display: flex;
 	align-items: center;
@@ -49,21 +37,18 @@ container {
 	margin-left: 7%; */
 	margin: 0 auto;
 }
-#pickdate {
-	font-size: 20px;
-}
 
 .results td {
 	transition: all 1s ease;
 }
-#bar {
+bar {
 	display: block;
 	height: 10px;
 	background: cyan;
-	max-width: 610px;
+	/* max-width: 610px; */
 	margin-bottom: 10px;
-	margin-left: 224px;
-	align-self: flex-start;
+	/* margin-left: 224px; */
+	align-self: center;
 }
 
 
@@ -91,25 +76,6 @@ others > div > span {
 	color: blue;
 	font-size: 30px;
 }
-#launchButton {
-	font-size: 24px;
-	padding: 5px;
-	margin: 20px 0 0 100px;
-}
-#launchButton:hover {
-	background-color: lightgreen;
-}
-
-.helpText {
-	font-size: 24px;
-	font-style: bold;
-}
-.stripe {
-	background-color: purple;
-	width: 500px;
-	height: 3px;
-}
-
 
 pair {
 	display: flex;

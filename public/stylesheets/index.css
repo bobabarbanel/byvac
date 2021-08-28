@@ -1,0 +1,63 @@
+body {
+	padding: 10px;
+	/* background-color: blue; */
+	/* font-size: 1.8em; */
+	font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-size: 1.5em;
+}
+loading {
+	display: none;
+	font-size: 5em;
+	margin: 200px 0 0 200px;
+}
+#datepicker {
+	font-size: 1.8em;
+}
+form {
+	margin-top: 2em;
+	font-size: 1.8em;
+}
+form label {
+	height: 20px;
+	margin-bottom: 50px;
+	color: darkblue;
+	font-size: 1.5em;
+}
+.site input[type="radio"] {
+	transform: scale(2);
+}
+
+.site > label:hover {
+	background-color: lightblue;
+}
+
+button {
+	font-size: 3em;
+	padding: 5px;
+	margin-top: 1em;
+}
+#launchButton:hover {
+	background-color: lightgreen;
+}
+
+.helpText {
+	font-style: bold;
+	font-size: 1.8em;
+}
+.stripe {
+	background-color: purple;
+	width: 80%;
+	height: 3px;
+}
+
+
+@media (min-width: 700px) {
+	form label {
+		font-size: 1em;
+	}
+}

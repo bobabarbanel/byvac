@@ -18,23 +18,29 @@
 </head>
 
 <body>
+    <data style="display: none">
+        <locationId>
+            <%= locationId %>
+        </locationId>
+        <startDate>
+            <%= startDate %>
+        </startDate>
+        <location>
+            <%= LOCATION %>
+        </location>
+    </data>
     <container>
         <div class="results_title">
             <span class="countdown_timer"></span>&nbsp;&nbsp;
             <span class="title_location">
-                <h1><%= LOCATION %><br />
-                    <%= startDate %></h1>
+                <h1>
+                    <%= LOCATION %><br />
+                        <%= startDate %>
+                </h1>
             </span>
         </div>
-        <data style="display: none">
-            <locationId>
-                <%= locationId %>
-            </locationId>
-            <startDate>
-                <%= startDate %>
-            </startDate>
-        </data>
-        <div id="bar"></div>
+
+        <bar></bar>
 
         <table class="results">
             <tbody>
@@ -148,17 +154,31 @@
         <others>
             <div>Pending:<span id="PENDING">&nbsp;<%= PENDING.M + PENDING.P + PENDING.J %>&nbsp;</span>
                 <span class="tiny">(
-                    <div><%= PENDING.P %>&nbsp;P</div>,&nbsp;
-                    <div><%= PENDING.M %>&nbsp;M</div>,&nbsp;
-                    <div><%= PENDING.J %>&nbsp;J</div>
-                )</span>
+                    <div>
+                        <%= PENDING.P %>&nbsp;P
+                    </div>,&nbsp;
+                    <div>
+                        <%= PENDING.M %>&nbsp;M
+                    </div>,&nbsp;
+                    <div>
+                        <%= PENDING.J %>&nbsp;J
+                    </div>
+                    )
+                </span>
             </div>
             <div>Cancelled:<span id="CANCELLED">&nbsp;<%= CANCELLED.M + CANCELLED.P + CANCELLED.J %>&nbsp;</span>
                 <span class="tiny">(
-                    <div><%= CANCELLED.P %>&nbsp;P</div>,&nbsp;
-                    <div><%= CANCELLED.M %>&nbsp;M</div>,&nbsp;
-                    <div><%= CANCELLED.J %>&nbsp;J</div>
-                )</span>
+                    <div>
+                        <%= CANCELLED.P %>&nbsp;P
+                    </div>,&nbsp;
+                    <div>
+                        <%= CANCELLED.M %>&nbsp;M
+                    </div>,&nbsp;
+                    <div>
+                        <%= CANCELLED.J %>&nbsp;J
+                    </div>
+                    )
+                </span>
             </div>
         </others>
         <p id="time"></p>

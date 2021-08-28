@@ -36,7 +36,7 @@ router.get('/', function (ignore, res) {
 });
 
 
-const allLocationIds = [471236, 466979, 469984, 466980];
+// const allLocationIds = [471236, 466979, 469984, 466980];
 
 // async function count_appts(startDate, locationId) {
 //   log("/appts", "===", { startDate, sessionToken, locationId }, "===")
@@ -115,11 +115,17 @@ const allLocationIds = [471236, 466979, 469984, 466980];
 //   }
 // }
 
-router.get('/appts/:startDate/:location/:locationId', function (req, res) {
+router.get('/appts/:startDate/:location/:locationId', function (req, res) { 
   let { startDate, location, locationId } = req.params;
+  log("get", req.params )
   startDate = startDate.trim();
   location = location.trim();
   locationId = locationId.trim();
+  calculate(startDate, location, locationId, res);
+});
+
+function calculate(startDate, location, locationId, res) {
+  log('calculate', {startDate, location, locationId});
   getOCT(startDate, locationId)
     .then(
       (vs) => {
@@ -127,17 +133,15 @@ router.get('/appts/:startDate/:location/:locationId', function (req, res) {
         vs.LOCATION = location;
         vs.startDate = startDate;
         vs.locationId = locationId;
-        log('130', vs);
+        // log('130', vs);
         res.render('results', vs)
       }
     )
     .catch(err => {
       console.log(err);
-      console.log("/appts", "===", { startDate, location, locationId }, "===");
+      console.log("/appts", "===", { startDate, location: encodeURI(location), locationId }, "===");
     })
-
-});
-
+}
 
 
 async function getOCT(theDate, locationId) {
@@ -194,11 +198,11 @@ function pivot({ status, reason }) {
 
 // }
 
-router.get('/refresh/:startDate/:locationId', function (req, res) { // Consider error handling here??
-  // let { startDate, locationId } = req.params;
+router.get('/refresh/:startDate/:location/:locationId', function (req, res) { // Consider error handling here??
+  const { startDate, location, locationId } = req.params;
   // startDate = startDate.trim();
   // locationId = locationId.trim();
-  // // if (startDate == undefined) return;
+  calculate(startDate, location, locationId, res);// if (startDate == undefined) return;
   // count_appts(startDate, locationId).then(
   //   async (data) => {
   //     log('calling prep_results');
