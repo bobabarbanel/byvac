@@ -22,7 +22,8 @@ $(function () {
         }
     });
 
-    $('li input').on('change', handleSite);
+    $('li > input').on('change', handleSite);
+    
     $('button').on('click', launch);
     function handleSite() {
         $('ul li').css("background", "white");
