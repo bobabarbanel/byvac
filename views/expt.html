@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Vaccination EXPT
+    </title>
+    <link rel="icon" type="image/jpg" href="/images/favicon.jpg" />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+        integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <style>
+        html {
+            font-size: 50px;
+        }
+        body {
+            /* width: 100%; */
+            background-color: orange;
+            /* padding: 5px; */
+            font-weight: bold;
+            /* display: flex;
+            justify-content: center; */
+        }
+
+        #whole {
+            margin: auto;
+            width: 90%;
+            max-width: 1400px;
+            background-color: lightblue;
+            font-size: 1rem;
+        }
+
+        .outer {
+            width: 80%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .inner {
+            width: 100%;
+        }
+
+        .left {
+            font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+            font-size: .8rem;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            text-align: right;
+            padding-right: 50px;
+            width: 50%;
+            border: 1px solid black;
+        }
+
+        .total {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 20px;
+            font-family: "Courier New", Courier, monospace;
+            justify-content: space-around;
+        }
+
+        
+
+        .vacTotal {
+            font-size: .8rem;
+            width: 2rem;
+            text-align: right;
+            border: 1px solid black;
+
+        }
+
+        .small {
+            display: flex;
+            flex-direction: column;
+            align-items: space-between;
+        }
+
+        .vacNum {
+            font-size: .4rem;
+            display: flex;
+            /* width: 100%; */
+            flex-direction: row;
+            /* justify-content: space-between; */
+            align-self: flex-end;
+        }
+
+        .num {
+            align-self: flex-start;
+        }
+
+        .tag {
+            margin-left: 1em;
+            align-self: flex-end;
+        }
+
+        hr.thick {
+            height: 0.1em;
+            width: 80%;
+            background-color: #BBB;
+        }
+        hr.thin {
+            height: 0.1em;
+            width: 80%;
+            background-color: transparent;
+        }
+
+        .open_bg {
+            background-color: pink;
+        }
+
+        .completed_bg {
+            background-color: rgb(250, 237, 124);
+            ;
+        }
+
+        .total_bg {
+            background-color: rgb(156, 201, 222);
+        }
+
+        @media (max-width: 900px) {
+            body {
+                padding: 5px;
+            }
+            #whole {
+                margin: 0 auto;
+                width: 90%;
+                /* max-width: 400px; */
+                background-color: palegreen;
+                font-size: 1.5rem;
+            }
+
+            .total {
+                flex-direction: column;
+            }
+
+            .small {
+                flex-direction: row;
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            .outer {
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .inner {
+                align-self: center;
+                font-size: .8rem;
+            }
+
+            .left {
+                text-align: center;
+                /* border: 1px solid black; */
+                width: auto;
+                padding: 0;
+            }
+            .vacTotal {
+                width: 80%;
+                text-align: center;
+                font-size: 1.2rem;
+                /* border: 1px solid black; */
+            }
+            .vacNum {
+                font-size: .3rem;
+                /* display: block; */
+                flex-direction: row;
+                align-items: center;
+                /* border: 1px solid black; */
+                align-self: center;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .num {
+                /* align-self: flex-start; */
+                margin-left: 0;
+                /* text-align: center; */
+                /* border: 1px solid red; */
+                margin-left: 0;
+            }
+            .tag {
+                /* align-self: center; */
+                /* border: 1px solid red; */
+                margin-left: .5em;
+            }
+
+           
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="whole">
+        <div class="outer open_bg">
+            <div class="inner left">Open</div>
+            <div class="inner right">
+                <div class="total">
+                    <!--   horiz or vertical-->
+                    <div class="vacTotal">36</div> <!-- LARGE number -->
+                    <div class="small">
+                        <!--  vertical or horiz -->
+                        <div class="vacNum">
+                            <!-- small number and text-->
+                            <div class="num">788</div>
+                            <div class="tag">Pfi</div>
+                        </div>
+                        <div class="vacNum">
+                            <div class="num">1</div>
+                            <div class="tag">Mod</div>
+                        </div>
+                        <div class="vacNum">
+                            <div class="num">88</div>
+                            <div class="tag">Jan</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="outer completed_bg">
+            <div class="inner left">Completed</div>
+            <div class="inner right">
+                <div class="total">
+                    <!--   horiz or vertical-->
+                    <div class="vacTotal">36</div> <!-- LARGE number -->
+                    <div class="small">
+                        <!--  vertical or horiz -->
+                        <div class="vacNum">
+                            <!-- small number and text-->
+                            <div class="num">788</div>
+                            <div class="tag">Pfi</div>
+                        </div>
+                        <div class="vacNum">
+                            <div class="num">1</div>
+                            <div class="tag">Mod</div>
+                        </div>
+                        <div class="vacNum">
+                            <div class="num">88</div>
+                            <div class="tag">Jan</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="thick">
+        <div class="outer total_bg">
+            <div class="inner left">Total</div>
+            <div class="inner right">
+                <div class="total">
+                    <!--   horiz or vertical-->
+                    <div class="vacTotal">236</div> <!-- LARGE number -->
+                    <div class="small">
+                        <!--  vertical or horiz -->
+                        <div class="vacNum">
+                            <!-- small number and text-->
+                            <div class="num">2</div>
+                            <div class="tag">Pfi</div>
+                        </div>
+                        <div class="vacNum">
+                            <div class="num">10</div>
+                            <div class="tag">Mod</div>
+                        </div>
+                        <div class="vacNum">
+                            <div class="num">188</div>
+                            <div class="tag">Jan</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+    </script>
+</body>
+
+</html>

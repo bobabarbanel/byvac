@@ -6,11 +6,15 @@
         "completedp",
         "count",
         "datepicker",
+        "horiz",
         "moderna",
         "openm",
         "openp",
         "pickdate",
+        "smalllabel",
+        "smallval",
         "totalm",
-        "totalp"
+        "totalp",
+        "vacdata"
     ]
 }
