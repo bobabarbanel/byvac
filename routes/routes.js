@@ -115,9 +115,9 @@ router.get('/', function (ignore, res) {
 //   }
 // }
 
-router.get('/appts/:startDate/:location/:locationId', function (req, res) { 
+router.get('/appts/:startDate/:location/:locationId', function (req, res) {
   let { startDate, location, locationId } = req.params;
-  log("get", req.params )
+  log("get", req.params)
   startDate = startDate.trim();
   location = location.trim();
   locationId = locationId.trim();
@@ -125,7 +125,7 @@ router.get('/appts/:startDate/:location/:locationId', function (req, res) {
 });
 
 function calculate(startDate, location, locationId, res) {
-  log('calculate', {startDate, location, locationId});
+  log('calculate', { startDate, location, locationId });
   getOCT(startDate, locationId)
     .then(
       (vs) => {
@@ -148,7 +148,7 @@ async function getOCT(theDate, locationId) {
   if (sessionToken === null) {
     await generate("getOCT");
   }
-  const theURL =
+  let theURL =
     `${BASE_URL}/appointments/report/?locationIdList=${locationId}&startDate=${theDate}&endDate=${theDate}&sessionToken=${sessionToken}`;
   initializeVS();
   try {
@@ -159,8 +159,25 @@ async function getOCT(theDate, locationId) {
     log('vacStatus', vacStatus);
     return vacStatus;
   }
-  catch(e) {
-    console.log("error", e)
+  catch (err) {
+    if (err.response.status === 401) {
+      await generate("401"); // get new value for sessionToken
+      log("count_appts after generate 401", { sessionToken });
+      theURL =
+        `${BASE_URL}/appointments/report/?locationIdList=${locationId}&startDate=${theDate}&endDate=${theDate}&sessionToken=${sessionToken}`;
+      initializeVS();
+      try {
+        const v = await axios.get(theURL); // try again
+        v.data.forEach(
+          patient => pivot(patient)
+        );
+        log('vacStatus', vacStatus);
+        return vacStatus;
+      } catch (err) {
+        console.log("generate error", { url }, err.response.status)
+        throw new Error(err); // second try failed
+      }
+    }
   }
 }
 
@@ -185,7 +202,7 @@ function pivot({ status, reason }) {
     .split(/\s/)[0]
     .charAt(0); // 1st char of 1st string
   log('pivot', status, vaccineChar)
-  if(status === 'NO_SHOW') { status = 'CANCELLED'; } // treat no-shows as cancelled
+  if (status === 'NO_SHOW') { status = 'CANCELLED'; } // treat no-shows as cancelled
   vacStatus[status][vaccineChar]++;
 }
 
