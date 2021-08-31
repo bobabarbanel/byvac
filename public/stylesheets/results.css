@@ -1,39 +1,29 @@
+html {
+	
+	font-weight: bold;
+	font: 65px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
 body {
 	padding: 10px;
-	font: 20px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	/* width: 80%; */
 }
 
-.results {
-	width: 80%;
-}
-/* .results th {
-	font-size: 36px;
-	width: 50%;
-} */
-.results td {
-	font-size: 108px;
-	font-weight: bold;
-	width: 300px;
-	text-align: right;
-}
+
 .results_title {
 	background: tan;
 	width: 80%;
 	text-align: center;
-	/* margin-left: 60px; */
-	display: flex;
 	align-items: center;
+	font-size: .4rem;
+	display: flex;
+	justify-content: space-around;
 }
 
 .title_location {
-	/* align-self: center;
-	margin-left: 7%; */
 	margin: 0 auto;
 }
 
@@ -41,10 +31,126 @@ bar {
 	display: block;
 	height: 10px;
 	background: cyan;
-	/* max-width: 610px; */
 	margin-bottom: 10px;
-	/* margin-left: 224px; */
 	align-self: center;
+}
+
+
+.countdown_timer {
+	width: 120px;
+	text-align: center;
+	font-weight: normal;
+	color: green;
+	font-size: .4rem;
+}
+#selectedDate {
+	margin-top: 30px;
+	color: blue;
+	font-size: 30px;
+}
+
+.num {
+	width: 1.8em;
+	align-self: flex-start;
+	text-align: right;
+}
+.tiny {
+	display: flex;
+	font-size: .5em;
+	margin-left: .5rem;
+}
+#whole {
+	margin: auto;
+	width: 90%;
+	max-width: 1400px;
+	font-size: 1rem;
+}
+
+.outer {
+	width: 80%;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: row;
+	padding: 20px;
+	margin-bottom: 20px;
+}
+
+.inner {
+	width: 100%;
+}
+
+.left {
+	font-family: bold 1rem "Lucida Grande", Helvetica, Arial, sans-serif;
+	text-align: right;
+	padding-right: 1rem;
+	width: 50%;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: white
+}
+
+.vacTotal {
+	font-family: bold .5 rem "Courier New", Courier, monospace;
+	font-size: .9rem;
+	width: 2rem;
+	text-align: right;
+	margin-left: 30px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.small {
+	font-family: "Courier New", Courier, monospace;
+	margin-left: 30px;
+	display: flex;
+	flex-direction: column;
+	font-weight: bold;
+}
+
+.vacNum {
+	font-size: .4rem;
+	display: flex;
+	flex-direction: row;
+	align-self: flex-end;
+}
+
+
+
+.tag {
+	margin-left: 1em;
+	align-self: flex-end;
+}
+
+#time {
+	font-size: .4rem;
+}
+
+
+
+hr.thick {
+	height: 0.1em;
+	width: 80%;
+	background-color: #BBB;
+}
+
+hr.thin {
+	height: 0.1em;
+	width: 80%;
+	background-color: transparent;
+}
+
+.open_bg {
+	background-color: pink;
+}
+
+.completed_bg {
+	background-color: rgb(250, 237, 124);
+}
+
+.total_bg {
+	background-color: rgb(156, 201, 222);
 }
 
 others {
@@ -54,45 +160,122 @@ others {
 	justify-content: space-around;
 	/* margin-top: 1em; */
 }
-others > div {
-	font-size: 1.5em;
-}
-others > div > span {
-	margin-left: 10px;
-}
-.countdown_timer {
-	width: 120px;
-	text-align: center;
-	font-weight: normal;
-	color: green;
-	font-size: 20px;
-}
-#selectedDate {
-	margin-top: 30px;
-	color: blue;
-	font-size: 30px;
+
+others>div {
+	font-size: .6em;
 }
 
-pair {
-	display: flex;
-	justify-content: space-between;
-	flex-direction: row;
-	align-items: center;
-	font-family: "Courier New", Courier, monospace;
-}
+@media (max-width: 900px) {
+	html {
+		font-size: 50px;
+		font-weight: bold;
+	}
 
-.label {
-	width: 50%;
-	font-size: 36px;
-}
-.right {
-	text-align: right;
-	width: 2em;
-}
-.num {
-	width: 1.8em;
-}
-.tiny {
-	display: flex;
-	font-size: 15px;
+	.thick {
+		display: none;
+	}
+
+	body {
+		padding: 5px;
+	}
+
+	.results_title {
+
+		justify-content: flex-start;
+	}
+
+	.title_location {
+		font-size: .15rem;
+	}
+
+	.countdown_timer {
+		font-size: .2rem;
+	}
+
+	#whole {
+		margin: 0 auto;
+		width: 90%;
+		font-size: 1.5rem;
+	}
+
+	.total {
+		flex-direction: column;
+	}
+
+	.small {
+		flex-direction: row;
+		width: 100%;
+		justify-content: space-around;
+		margin-left: 0;
+	}
+
+	.outer {
+		margin-bottom: 5px;
+		flex-direction: column;
+		padding-top: 0;
+	}
+
+	others {
+		margin-top: 0;
+	}
+
+	others>div {
+		font-size: .3rem;
+	}
+
+	others>div>.tiny {
+		font-size: .25rem;
+	}
+
+	.left {
+		text-align: center;
+		width: 120%;
+		font-size: .8rem;
+		align-self: center;
+		/* border: 1px solid black; */
+		padding-right: 0;
+	}
+
+	.vacTotal {
+		width: 100%;
+		text-align: center;
+		margin-left: 0;
+		font-size: 1.5rem;
+		/* border: 1px solid black; */
+		font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+	}
+
+	.vacNum {
+		font-size: .3rem;
+		text-align: center;
+		flex-direction: row;
+		align-items: center;
+		align-self: center;
+		width: 100%;
+		justify-content: center;
+		font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+	}
+
+	.vacNum:not(:last-child):after {
+		content: ', ';
+	}
+
+	.num {
+		/* align-self: flex-start; */
+		margin-left: 0;
+		/* text-align: center; */
+		/* border: 1px solid red; */
+		text-align: right;
+	}
+
+	.tag {
+		/* align-self: center; */
+		/* border: 1px solid red; */
+		margin-left: .5em;
+	}
+
+	#time {
+		font-size: .3rem;
+	}
+
 }
