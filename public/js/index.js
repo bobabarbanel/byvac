@@ -35,7 +35,20 @@ $(function () {
         const location = $('.site input:checked').parent().text().trim(); // .replace(/\//, '_'); // remove '/' in location text
         const locationId = $('.site input:checked').val();
         $('container').hide();
-        $('loading').show();
+        const loadText = $('loading');
+        loadText.show();
+        fade_in();
         window.open(`/appts/${startDate}/${encodeURI(location)}/${locationId}`, '_self');
+    }
+    async function fade_in() {
+        let opacity = 0;
+        setInterval(
+            () => {
+                opacity += 0.1;
+                opacity = (opacity >= 1) ? 1.0 : opacity;
+                loadText.css('background-color', `rgba(0,0,255,${opacity})`)
+            },
+            250
+        )
     }
 });

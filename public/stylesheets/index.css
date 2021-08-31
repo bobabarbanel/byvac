@@ -16,8 +16,17 @@ container {
 loading {
 	display: none;
 	font-size: 2rem;
-	margin: 0 auto;
+	position: absolute;
+	background: white;
+	color: white;
+	left: 40vw;
+	top: 40vh;
+	width: 5em;
+	padding: 50px;
 }
+
+
+
 #datepicker {
 	font-size: 1rem;
 }
@@ -32,17 +41,17 @@ ul li {
 	color: darkblue;
 	font-size: 1.2rem;
 	padding-left: 15px;
-	padding-top: .2rem;
+	padding-top: 0.2rem;
 }
 ul input {
-	transform: scale(2) ;
+	transform: scale(2);
 }
 
 ul li:hover {
 	background-color: lightblue;
 }
 ul li span {
-	transform: translate(0,1rem);
+	transform: translate(0, 1rem);
 }
 
 button {
@@ -59,7 +68,6 @@ button:hover {
 	font-style: bold;
 	font-size: 1rem;
 }
-
 
 @media (max-width: 900px) {
 	html {
