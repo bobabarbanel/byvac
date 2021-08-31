@@ -19,13 +19,11 @@ loading {
 	position: absolute;
 	background: white;
 	color: white;
-	left: 40vw;
+	left: 20vw;
 	top: 40vh;
 	width: 5em;
 	padding: 50px;
 }
-
-
 
 #datepicker {
 	font-size: 1rem;
@@ -35,23 +33,19 @@ ul {
 	font-size: 1.2rem;
 	list-style-type: none;
 }
-ul li {
+ul > li {
 	height: 1.8em;
-	/* margin-bottom: 10px; */
 	color: darkblue;
 	font-size: 1.2rem;
 	padding-left: 15px;
 	padding-top: 0.2rem;
 }
-ul input {
-	transform: scale(2);
+ul > li > input {
+	transform: scale(2) translate(0,-3px);
 }
 
-ul li:hover {
+ul > li:hover {
 	background-color: lightblue;
-}
-ul li span {
-	transform: translate(0, 1rem);
 }
 
 button {

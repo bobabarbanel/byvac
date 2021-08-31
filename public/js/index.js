@@ -23,7 +23,9 @@ $(function () {
     });
 
     $('li > input').on('change', handleSite);
-    
+    $('li > span').on('click', (e) => {
+        $(e.target).parent().find('input').trigger('click');
+    });
     $('button').on('click', launch);
     function handleSite() {
         $('ul li').css("background", "white");
@@ -35,18 +37,19 @@ $(function () {
         const location = $('.site input:checked').parent().text().trim(); // .replace(/\//, '_'); // remove '/' in location text
         const locationId = $('.site input:checked').val();
         $('container').hide();
-        const loadText = $('loading');
-        loadText.show();
-        fade_in();
+        $('loading').show();
+        fade_in($('loading'));
         window.open(`/appts/${startDate}/${encodeURI(location)}/${locationId}`, '_self');
     }
-    async function fade_in() {
+    async function fade_in(loadText) {
         let opacity = 0;
+        loadText.css('background-color', `rgba(0,0,255,${opacity})`);
+        
         setInterval(
             () => {
                 opacity += 0.1;
                 opacity = (opacity >= 1) ? 1.0 : opacity;
-                loadText.css('background-color', `rgba(0,0,255,${opacity})`)
+                loadText.css('background-color', `rgba(0,0,255,${opacity})`);
             },
             250
         )
