@@ -53,6 +53,7 @@ button {
 	padding: 8px;
 	margin-top: 1em;
 	border-radius: 15px;
+	background-color: rgb(32, 235, 32)
 }
 button:hover {
 	background-color: lightgreen;
