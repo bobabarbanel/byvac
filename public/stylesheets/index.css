@@ -41,7 +41,7 @@ ul > li {
 	padding-top: 0.2rem;
 }
 ul > li > input {
-	transform: scale(2) translate(0,-3px);
+	transform: scale(2);
 }
 
 ul > li:hover {

@@ -32,6 +32,7 @@ async function generate(tag) {
 }
 /* GET home page. */
 router.get('/', function (ignore, res) {
+  log('index page');
   res.render("index");
 });
 
@@ -116,6 +117,7 @@ router.get('/', function (ignore, res) {
 // }
 
 router.get('/appts/:startDate/:location/:locationId', function (req, res) {
+  log('/appts');
   let { startDate, location, locationId } = req.params;
   log("get", req.params)
   startDate = startDate.trim();
@@ -218,6 +220,7 @@ function pivot({ status, reason }) {
 
 router.get('/refresh/:startDate/:location/:locationId', function (req, res) { // Consider error handling here??
   const { startDate, location, locationId } = req.params;
+  log('/refresh', { startDate, location, locationId });
   // startDate = startDate.trim();
   // locationId = locationId.trim();
   calculate(startDate, location, locationId, res);// if (startDate == undefined) return;

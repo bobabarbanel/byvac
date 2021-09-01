@@ -33,6 +33,7 @@ $(function () {
         $("#launchButton").prop("disabled", false);
     }
     function launch() {
+        console.log('launch');
         const startDate = $('#selectedDate').text().trim();
         const location = $('.site input:checked').parent().text().trim(); // .replace(/\//, '_'); // remove '/' in location text
         const locationId = $('.site input:checked').val();
@@ -45,13 +46,14 @@ $(function () {
         let opacity = 0;
         loadText.css('background-color', `rgba(0,0,255,${opacity})`);
         
-        setInterval(
+        const interval = setInterval(
             () => {
                 opacity += 0.1;
-                opacity = (opacity >= 1) ? 1.0 : opacity;
+                if(opacity > 1) clearInterval(interval);
                 loadText.css('background-color', `rgba(0,0,255,${opacity})`);
             },
             250
         )
+        return;
     }
 });

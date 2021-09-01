@@ -158,7 +158,6 @@ others {
 	width: 80%;
 	display: flex;
 	justify-content: space-around;
-	/* margin-top: 1em; */
 }
 
 others>div {
@@ -213,10 +212,6 @@ others>div {
 		margin-bottom: 5px;
 		flex-direction: column;
 		padding-top: 0;
-	}
-
-	others {
-		margin-top: 0;
 	}
 
 	others>div {
@@ -275,7 +270,7 @@ others>div {
 	}
 
 	#time {
-		font-size: .3rem;
+		font-size: .18rem;
 	}
 
 }
