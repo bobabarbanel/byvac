@@ -17,13 +17,15 @@ if (theDate === undefined) {
     var dateFormat = require('dateformat');
     let today = new Date();
     theDate = dateFormat(today, "yyyy-mm-dd");
+
 }
+console.log(theDate);
 // console.log("Date: ", theDate)
 axios.get(tokenURL).then(
     (r) => {
         const sessionToken = r.data.sessionToken;
         // console.log({ sessionToken });
-        getTest(sessionToken, '2021-08-28');
+        getTest(sessionToken, theDate);
         // getAppts(sessionToken);
         // getCount('COMPLETED', sessionToken);
         // getCount('OPEN', sessionToken);
@@ -82,14 +84,18 @@ function getCount(status, token) {
 function getTest(token, theDate) {
     // /appointments/countByStatus/location/{locationId}
     // let theDate = "2021-08-28";
-    const theURL =
-        `${BASE_URL}/appointments/report/?locationIdList=466979&startDate=${theDate}&endDate=${theDate}&sessionToken=${token}`;
-    // const url = APPT_COUNT + "&sessionToken=" + sessionToken;
+    let theURL =
+        `${BASE_URL}/appointments/report/?locationIdList=471236&startDate=${theDate}` +
+        `&endDate=${theDate}&sessionToken=${token}` +
+        `&pageSize=2&pageNum=1`;
+    theURL = "https://api.timetap.com/test/appointments/report/?locationIdList=471236&startDate=2021-09-25&endDate=2021-09-25&sessionToken=st.api.api.6052015f7ff24984a7db7a89f9bf1a27&pageSize=6&pageNumber=1"
+
+    console.log({ theURL })
     initializeVS();
     console.log("start get");
     axios.get(theURL).then(
         (v) => {
-            console.log(theURL);
+            console.log(Object.keys(v));
             v.data.forEach(
                 patient => pivot(patient)
             );
@@ -98,7 +104,7 @@ function getTest(token, theDate) {
         }
     ).catch(e => console.log("error", e));
 
-    
+
     function initializeVS() {
         vacStatus =
         {
@@ -107,19 +113,38 @@ function getTest(token, theDate) {
             OPEN: {
             },
             COMPLETED: {
+            },
+            OTHER: {
             }
         }
+        for (let key in vacStatus) {
+            for (let c of ['M', 'P', 'J'])  // vaccine types
+                vacStatus[key][c] = 0;
+        }
     }
-    function pivot({ status, reason }) {
-        const vaccine = reason.reasonDesc.split(/\s/)[0]
-        // console.log(status, vaccine)
-        const vac = vacStatus[status];
-        if (vac[vaccine]) {
-            vac[vaccine]++;
+    function pivot({ status, fields, reason }) {
+        // const vaccine = reason.reasonDesc.split(/\s/)[0];
+        // console.log({ status, vaccine });
+        // if ()
+        //     const vac = vacStatus[status];
+        // if (vac[vaccine]) {
+        //     vac[vaccine]++;
+        // }
+        // else {
+        //     vac[vaccine] = 1;
+        // }
+
+        const vaccineChar = reason.reasonDesc
+            .split(/\s/)[0]
+            .charAt(0); // 1st char of 1st string
+        if (status === 'NO_SHOW') { status = 'CANCELLED'; } // treat no-shows as cancelled
+        if (vacStatus[status][vaccineChar] === undefined) {
+            console.log('*** pivot', status, vaccineChar, 'ignored')
+        } else {
+            console.log('pivot', status, vaccineChar)
+            vacStatus[status][vaccineChar]++;
         }
-        else {
-            vac[vaccine] = 1;
-        }
+        
     }
 }
 

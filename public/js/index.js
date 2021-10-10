@@ -37,6 +37,7 @@ $(function () {
         const startDate = $('#selectedDate').text().trim();
         const location = $('.site input:checked').parent().text().trim(); // .replace(/\//, '_'); // remove '/' in location text
         const locationId = $('.site input:checked').val();
+        console.log({startDate,location, locationId})
         $('container').hide();
         $('loading').show();
         fade_in($('loading'));

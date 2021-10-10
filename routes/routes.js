@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const md5 = require('md5');
-const DEBUG = false;
+const DEBUG = true;
 function log(...args) {
   if (DEBUG) {
     console.log(...args);
@@ -117,9 +117,9 @@ router.get('/', function (ignore, res) {
 // }
 
 router.get('/appts/:startDate/:location/:locationId', function (req, res) {
-  log('/appts');
+  // log('/appts');
   let { startDate, location, locationId } = req.params;
-  log("get", req.params)
+  // log("get", req.params);
   startDate = startDate.trim();
   location = location.trim();
   locationId = locationId.trim();
@@ -127,74 +127,122 @@ router.get('/appts/:startDate/:location/:locationId', function (req, res) {
 });
 
 function calculate(startDate, location, locationId, res) {
-  log('calculate', { startDate, location, locationId });
-  getOCT(startDate, locationId)
+  // log('calculate', { startDate, location, locationId });
+  getOCT(startDate, location, locationId)
     .then(
       (vs) => {
-        vs.TITLE = "Appts: " + location;
-        vs.LOCATION = location;
-        vs.startDate = startDate;
-        vs.locationId = locationId;
-        // log('130', vs);
-        res.render('results', vs)
+        console.log(vs)
+        if (vs.status === 'done')
+          res.render('results', vs);
+          else {
+            res.render('error', vs);
+          }
       }
     )
     .catch(err => {
       console.log(err);
-      console.log("/appts", "===", { startDate, location: encodeURI(location), locationId }, "===");
+      console.log("with error /appts", "===", { startDate, location: encodeURI(location), locationId }, "===");
     })
 }
 
 
-async function getOCT(theDate, locationId) {
+async function getOCT(theDate, location, locationId) {
   if (sessionToken === null) {
     await generate("getOCT");
   }
+  const pageSize = 100;
+  let pageNumber = 1;
+  initializeVS(theDate, location, locationId);
+  let status = 'in progress'
+  while (status === 'in progress') {
+    status = await queryPage(pageSize, pageNumber++, theDate, locationId);
+  }
+
+  vacStatus.status = status;
+  return vacStatus;
+}
+
+async function queryPage(pageSize, pageNumber, theDate, locationId) {
+  // log('queryPage', {pageNumber, pageSize})
   let theURL =
-    `${BASE_URL}/appointments/report/?locationIdList=${locationId}&startDate=${theDate}&endDate=${theDate}&sessionToken=${sessionToken}`;
-  initializeVS();
+    `${BASE_URL}/appointments/report/?locationIdList=${locationId}` +
+    `&startDate=${theDate}&endDate=${theDate}&sessionToken=${sessionToken}` +
+    `&pageSize=${pageSize}&pageNumber=${pageNumber}`;
+  // log({ theURL });
   try {
     const v = await axios.get(theURL);
-    v.data.forEach(
-      patient => pivot(patient)
-    );
-    log('vacStatus', vacStatus);
-    return vacStatus;
+    // log("v length", v.data.length)
+    if (v.data.length === 0) {
+      return 'done';
+    }
+    else {
+      v.data.forEach(
+        patient => pivot(patient)
+      );
+      log({
+        pageNumber: pageNumber,
+        vacStatus: vacStatus
+      });
+
+      return 'in progress'
+    }
   }
   catch (err) {
     if (err.response.status === 401) {
+
+      log('401 error')
       await generate("401"); // get new value for sessionToken
-      log("count_appts after generate 401", { sessionToken });
+      //   log("count_appts after generate 401", { sessionToken });
       theURL =
-        `${BASE_URL}/appointments/report/?locationIdList=${locationId}&startDate=${theDate}&endDate=${theDate}&sessionToken=${sessionToken}`;
-      initializeVS();
+        `${BASE_URL}/appointments/report/?locationIdList=${locationId}` +
+        `&startDate=${theDate}&endDate=${theDate}&sessionToken=${sessionToken}` +
+        `&pageSize=${pageSize}&pageNumber=${pageNumber}`;
+      //   // `&pageSize=${pageSize}&pageNumber=${pageNumber}`;
       try {
-        const v = await axios.get(theURL); // try again
-        v.data.forEach(
-          patient => pivot(patient)
-        );
-        log('vacStatus', vacStatus);
-        return vacStatus;
-      } catch (err) {
-        console.log("generate error", { url }, err.response.status)
-        throw new Error(err); // second try failed
+        const v = await axios.get(theURL);
+        // log("v length", v.data.length)
+        if (v.data.length === 0) {
+          return 'done';
+        }
+        else {
+          v.data.forEach(
+            patient => pivot(patient)
+          );
+          log({
+            pageNumber: pageNumber,
+            vacStatus: vacStatus
+          });
+
+          return 'in progress'
+        }
       }
+      catch (err) {
+        err = JSON.stringify(err);
+        return err;
+      }
+
+
+    } else {
+      err = JSON.stringify(err);
+      return err;
     }
   }
 }
 
-
-function initializeVS() {
+function initializeVS(theDate, location, locationId) {
   vacStatus =
   {
+    status: null,
+    LOCATION: location,
+    startDate: theDate,
+    locationId: locationId,
     CANCELLED: {},
     OPEN: {},
     COMPLETED: {},
     PENDING: {},
-    CANCELLED: {},
     // NO_SHOW: {}
   }
-  for (let key in vacStatus) {
+  for (let key of ['CANCELLED', 'OPEN', 'COMPLETED', 'PENDING']) {
     for (let c of ['M', 'P', 'J'])  // vaccine types
       vacStatus[key][c] = 0;
   }
@@ -203,9 +251,11 @@ function pivot({ status, reason }) {
   const vaccineChar = reason.reasonDesc
     .split(/\s/)[0]
     .charAt(0); // 1st char of 1st string
-  log('pivot', status, vaccineChar)
   if (status === 'NO_SHOW') { status = 'CANCELLED'; } // treat no-shows as cancelled
-  vacStatus[status][vaccineChar]++;
+  if (vacStatus[status][vaccineChar] !== undefined) {
+    // log('pivot', status, vaccineChar)
+    vacStatus[status][vaccineChar]++;
+  }
 }
 
 // async function prep_results(data, startDate, locationId) {
