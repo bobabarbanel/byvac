@@ -52,22 +52,7 @@ $(function () {
         let url = `/refresh/${startDate}/${encodeURI(location)}/${locationId}`;
         await axios.get(url);
 
-        // for (let tag of data) {
-
-        //     const target = $('#' + tag);
-
-        //     target.css("background", TRANSITION_COLOR).text(data[tag]);
-
-        //     setTimeout(() => {
-        //         target.css('background', AFTER_TRANSITION_COLORS[tag]);
-        //     }, 500);
-        //     if (data['OPEN'] == 0) {
-        //         clearInterval(interval);
-        //         if(indicator) clearInterval(indicator);
-        //         $("#bar").css("width", "100%").css('background-color','green').css('display', 'block');
-        //     }
-        // }
-        if (false && $('#OPEN').text() !== '0') {
+        if ($('#OPEN').text() !== '0') {
             init_timer();
             draw(Date.now(), REFRESH_TIME * .95).then(() => init_timer());
         }
