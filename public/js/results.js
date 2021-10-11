@@ -3,10 +3,9 @@ $(function () {
     const startDate = $('startDate').text().trim();
     const location = $('location').text().trim();
     const timeLeft = $('.countdown_timer');
-    const timeStamp = $("#time");
+    const bar = $('bar');
 
-    timeStamp.text("As of " + new Date())
-    const REFRESH_TIME = 3 * 60 * 1000; // 3 minutes
+    const REFRESH_TIME = .5 * 60 * 1000; // 3 minutes
 
     const TRANSITION_COLOR = '#AED6F1';
     const AFTER_TRANSITION_COLORS = {
@@ -17,8 +16,8 @@ $(function () {
         "OPEN": "pink",
         "time": "white"
     };
-
-    $("#bar").css("width", 0.1 + "%");
+    let indicator;
+    bar.css("width", 0.1 + "%");
     init_timer();
     draw(Date.now(), REFRESH_TIME)
     const interval = setInterval(function () {
@@ -26,7 +25,7 @@ $(function () {
     }, REFRESH_TIME);
 
     async function draw(start, end) {
-        const indicator = setInterval(() => {
+        indicator = setInterval(() => {
             const nowMS = Date.now() - start;
             const now = nowMS / 1000 / 60;
             let min = Math.floor(3 - now);
@@ -39,38 +38,45 @@ $(function () {
             }
             timeLeft.html(`<i class="fas fa-history"></i>&nbsp;${min}:${sec}&nbsp;`);
 
-            $("bar").css("width", (80 - ((3-now)*80/3)) + "%")
+            bar.css("width", (80 - ((3 - now) * 80 / 3)) + "%")
 
             if (nowMS >= (.995) * end) {
                 clearInterval(indicator);
-                $("#bar").css("width", 0.1 + "%"); // reset
+                bar.css("width", 0.1 + "%"); // reset
             }
         }, 5000)
     }
     // function rand() { return  Math.floor(Math.random()*20); }
     async function refreshValues() {
-
+        console.log('refreshValues')
         let url = `/refresh/${startDate}/${encodeURI(location)}/${locationId}`;
-        const data = (await axios.get(url)).data;
-        for (let tag in data) {
-            const target = $('#' + tag);
+        await axios.get(url);
 
-            target.css("background", TRANSITION_COLOR).text(data[tag]);
+        // for (let tag of data) {
 
-            setTimeout(() => {
-                target.css('background', AFTER_TRANSITION_COLORS[tag]);
-            }, 500);
-            if (data[OPEN] == 0) {
-                clearInterval(interval);
-            }
+        //     const target = $('#' + tag);
+
+        //     target.css("background", TRANSITION_COLOR).text(data[tag]);
+
+        //     setTimeout(() => {
+        //         target.css('background', AFTER_TRANSITION_COLORS[tag]);
+        //     }, 500);
+        //     if (data['OPEN'] == 0) {
+        //         clearInterval(interval);
+        //         if(indicator) clearInterval(indicator);
+        //         $("#bar").css("width", "100%").css('background-color','green').css('display', 'block');
+        //     }
+        // }
+        if (false && $('#OPEN').text() !== '0') {
+            init_timer();
+            draw(Date.now(), REFRESH_TIME * .95).then(() => init_timer());
         }
-        init_timer();
-        draw(Date.now(), REFRESH_TIME * .95).then(() => init_timer());
-
-        timeStamp.css('background', TRANSITION_COLOR).text("As of " + new Date());
-        setTimeout(() => {
-            timeStamp.css('background', AFTER_TRANSITION_COLORS["time"]);
-        }, 500);
+        else {
+            clearInterval(interval);
+            if (indicator) clearInterval(indicator);
+            bar.css("width", "80%").css('background-color', 'green');
+            $("body").css('background-color', 'lightgrey');
+        }
     }
 
     function init_timer() {

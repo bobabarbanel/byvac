@@ -27,6 +27,7 @@
         <location>
             <%= LOCATION %>
         </location>
+        <div id="OPEN"><%= OPEN.M + OPEN.P + OPEN.J %></div>
     </data>
     <container>
         <div class="results_title">
@@ -66,7 +67,7 @@
                     </div>
                     <div class="vacNum">
                         <div class="num">
-                            <%= OPEN.M %>
+                            <%= OPEN.J %>
                         </div>
                         <div class="tag">Jan</div>
                     </div>
@@ -101,7 +102,7 @@
                     </div>
                     <div class="vacNum">
                         <div class="num">
-                            <%= COMPLETED.M %>
+                            <%= COMPLETED.J %>
                         </div>
                         <div class="tag">Jan</div>
                     </div>
@@ -116,7 +117,7 @@
                 </div>
 
                 <div class="vacTotal">
-                    <%= OPEN.M + OPEN.P + OPEN.J + COMPLETED.M + COMPLETED.P + COMPLETED.J %>
+                    <%= OPEN.M + OPEN.P + OPEN.J + COMPLETED.P + COMPLETED.M + COMPLETED.J %>
                 </div>
                 <div class="small">
                     <!--  vertical or horiz -->
@@ -177,7 +178,7 @@
                 </span>
             </div>
         </others>
-        <p id="time"></p>
+        <p id="time"><%= timeStamp %></p>
     </container>
     <script src=" /js/results.js">
     </script>

@@ -15,6 +15,7 @@
         "smallval",
         "totalm",
         "totalp",
-        "vacdata"
+        "vacdata",
+        "vserror"
     ]
 }
