@@ -1,5 +1,5 @@
 html {
-	font-size: 36px;
+	font-size: 28px;
 }
 body {
 	padding: 10px;
@@ -30,7 +30,7 @@ loading {
 }
 ul {
 	margin-top: 2rem;
-	font-size: 1.2rem;
+	font-size: 1rem;
 	list-style-type: none;
 }
 ul > li {
@@ -50,8 +50,8 @@ ul > li:hover {
 
 button {
 	font-size: 3rem;
-	padding: 8px;
-	margin-top: 1em;
+	padding: 5px;
+	margin-top: .5em;
 	border-radius: 15px;
 	background-color: rgb(32, 235, 32)
 }
