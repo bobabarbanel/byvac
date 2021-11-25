@@ -27,7 +27,7 @@
         <location>
             <%= LOCATION %>
         </location>
-        
+
     </data>
     <container>
         <div class="results_title">
@@ -83,7 +83,7 @@
                 </div>
 
                 <div id="COMPLETED" class="vacTotal">
-                    <%= COMPLETED_TOTAL %>   
+                    <%= COMPLETED_TOTAL %>
                 </div>
                 <div class="small">
                     <!--  vertical or horiz -->
@@ -146,35 +146,53 @@
         </div>
 
         <others>
-            <div>Pending:&nbsp;<span id="PENDING_TOTAL"><%= PENDING_TOTAL %></span>&nbsp;
+            <div>Pending:&nbsp;<span id="PENDING_TOTAL">
+                    <%= PENDING_TOTAL %>
+                </span>&nbsp;
                 <span class="tiny">
                     <div>
-                        (<span id="PENDING_P"><%= PENDING.P %></span> &nbsp;P
+                        (<span id="PENDING_P">
+                            <%= PENDING.P %>
+                        </span> &nbsp;P
                     </div>,&nbsp;
                     <div>
-                        <span id="PENDING_M"><%= PENDING.M %></span> &nbsp;M
+                        <span id="PENDING_M">
+                            <%= PENDING.M %>
+                        </span> &nbsp;M
                     </div>,&nbsp;
                     <div>
-                        <span id="PENDING_M"><%= PENDING.J %></span> &nbsp;J)
+                        <span id="PENDING_M">
+                            <%= PENDING.J %>
+                        </span> &nbsp;J)
                     </div>
                 </span>
             </div>
 
-            <div>Cancelled+NS:&nbsp;<span id="CANCELLED_TOTAL"><%= CANCELLED_TOTAL + NO_SHOW_TOTAL %></span>&nbsp;
+            <div>Cancelled+NS:&nbsp;<span id="CANCELLED_TOTAL">
+                    <%= CANCELLED_TOTAL + NO_SHOW_TOTAL %>
+                </span>&nbsp;
                 <span class="tiny">
                     <div>
-                        (<span id="CANCELLED_P"><%= CANCELLED.P + NO_SHOW.P %></span> &nbsp;P
+                        (<span id="CANCELLED_P">
+                            <%= CANCELLED.P + NO_SHOW.P %>
+                        </span> &nbsp;P
                     </div>,&nbsp;
                     <div>
-                        <span id="CANCELLED_M"><%= CANCELLED.M + NO_SHOW.M %></span> &nbsp;M
+                        <span id="CANCELLED_M">
+                            <%= CANCELLED.M + NO_SHOW.M %>
+                        </span> &nbsp;M
                     </div>,&nbsp;
                     <div>
-                        <span id="CANCELLED_M"><%= CANCELLED.J + NO_SHOW.J %></span> &nbsp;J)
+                        <span id="CANCELLED_M">
+                            <%= CANCELLED.J + NO_SHOW.J %>
+                        </span> &nbsp;J)
                     </div>
                 </span>
             </div>
         </others>
-        <p id="time"><%= timeStamp %></p>
+        <p id="time">
+            <%= timeStamp %>
+        </p>
     </container>
     <script src="/js/results.js"></script>
 </body>
