@@ -55,14 +55,14 @@ bar {
 }
 .tiny {
 	display: flex;
-	font-size: .4em;
+	font-size: .4rem;
 	/* margin-left: .5rem; */
 }
 #whole {
 	margin: auto;
 	width: 90%;
 	max-width: 1400px;
-	font-size: 1rem;
+	font-size: .95rem;
 }
 
 .outer {
