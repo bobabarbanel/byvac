@@ -117,8 +117,6 @@ bar {
 	align-self: flex-end;
 }
 
-
-
 .tag {
 	margin-left: 1em;
 	align-self: flex-end;
@@ -266,4 +264,10 @@ others>div {
 		font-size: .18rem;
 	}
 
+}
+
+@media (orientation: landscape) and (min-height: 700px) {
+	html {
+		font-size: 120px;
+	}
 }
