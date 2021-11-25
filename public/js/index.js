@@ -1,12 +1,13 @@
 $(function () {
     $('.site input').prop('checked', false);
-    $("#launchButton").prop("disabled", true);
+    // $("#launchButton").prop("disabled", true);
     let today = new Date();
     let month = today.getMonth() + 1;
     if (month < 10) month = "0" + month;
     let day = today.getDate();
     if (day < 10) day = "0" + day;
-
+    const button = $('button');
+    
     $('#datepicker').datepicker('setDate', null);
 
     $("#selectedDate").text(`${today.getFullYear()}-${month}-${day}`);
@@ -26,18 +27,18 @@ $(function () {
     $('li > span').on('click', (e) => {
         $(e.target).parent().find('input').trigger('click');
     });
-    $('button').on('click', launch);
+    button.on('click', launch);
     function handleSite() {
         $('ul li').css("background", "white");
         $(this).parent().css("background", "orange");
-        $("#launchButton").prop("disabled", false);
+        button.prop("disabled", false);
     }
     function launch() {
-        console.log('launch');
+        // console.log('launch');
         const startDate = $('#selectedDate').text().trim();
         const location = $('.site input:checked').parent().text().trim(); // .replace(/\//, '_'); // remove '/' in location text
         const locationId = $('.site input:checked').val();
-        console.log({startDate,location, locationId})
+        // console.log({startDate,location, locationId})
         $('container').hide();
         $('loading').show();
         fade_in($('loading'));

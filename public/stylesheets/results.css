@@ -57,7 +57,7 @@ bar {
 .tiny {
 	display: flex;
 	font-size: .5em;
-	margin-left: .5rem;
+	/* margin-left: .5rem; */
 }
 #whole {
 	margin: auto;

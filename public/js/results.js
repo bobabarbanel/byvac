@@ -4,28 +4,40 @@ $(function () {
     const location = $('location').text().trim();
     const timeLeft = $('.countdown_timer');
     const bar = $('bar');
+    const REFRESH_MINUTES = 3;
+    const REFRESH_TIME = REFRESH_MINUTES * 60 * 1000; // 3 minutes
+    let interval = null;
+    // const TRANSITION_COLOR = '#AED6F1';
+    // const AFTER_TRANSITION_COLORS = {
+    //     "PENDING": "wheat",
+    //     "CANCELLED": "wheat",
+    //     "COMPLETED": "white",
+    //     "TOTAL": "white",
+    //     "OPEN": "pink",
+    //     "time": "white"
+    // };
+    // let indicator;
 
-    const REFRESH_TIME = .5 * 60 * 1000; // 3 minutes
+    run_indicator();
+    function run_indicator() {
+        if (+$('#OPEN_TOTAL').text().trim() === 0) {
+            if (interval) clearInterval(interval);
+            // if (indicator) clearInterval(indicator);
+            init_timer('Done')
+            bar.css("width", "80%").css('background-color', 'green');
+            $("body").css('background-color', 'lightgrey');
+        }
+        else {
+            draw(Date.now(), REFRESH_TIME);
+            // console.log('indicator running...');
+        }
+    }
 
-    const TRANSITION_COLOR = '#AED6F1';
-    const AFTER_TRANSITION_COLORS = {
-        "PENDING": "wheat",
-        "CANCELLED": "wheat",
-        "COMPLETED": "white",
-        "TOTAL": "white",
-        "OPEN": "pink",
-        "time": "white"
-    };
-    let indicator;
-    bar.css("width", 0.1 + "%");
-    init_timer();
-    draw(Date.now(), REFRESH_TIME)
-    const interval = setInterval(function () {
-        refreshValues();
-    }, REFRESH_TIME);
+    function draw(start, end) {
+        bar.css("width", 0.1 + "%");
+        init_timer('3:00');
 
-    async function draw(start, end) {
-        indicator = setInterval(() => {
+        interval = setInterval(() => {
             const nowMS = Date.now() - start;
             const now = nowMS / 1000 / 60;
             let min = Math.floor(3 - now);
@@ -38,33 +50,56 @@ $(function () {
             }
             timeLeft.html(`<i class="fas fa-history"></i>&nbsp;${min}:${sec}&nbsp;`);
 
-            bar.css("width", (80 - ((3 - now) * 80 / 3)) + "%")
-
+            let percent = (80 - ((3 - now) * 80 / 3)); // assumes 3 minute in cycle
+            // console.log(percent);
+            bar.css("width", percent + "%")
+            // console.log('setTimeout', bar.css('width'), nowMS, (.995) * end )
             if (nowMS >= (.995) * end) {
-                clearInterval(indicator);
-                bar.css("width", 0.1 + "%"); // reset
+                clearInterval(interval);
+                interval = null;
+                refreshValues().then(() => run_indicator())
             }
         }, 5000)
     }
-    // function rand() { return  Math.floor(Math.random()*20); }
-    async function refreshValues() {
-        console.log('refreshValues')
-        let url = `/refresh/${startDate}/${encodeURI(location)}/${locationId}`;
-        await axios.get(url);
 
-        if ($('#OPEN').text() !== '0') {
-            init_timer();
-            draw(Date.now(), REFRESH_TIME * .95).then(() => init_timer());
+    async function refreshValues() {
+        // console.log('refreshValues');
+        const url = `/refresh/${startDate}/${encodeURI(location)}/${locationId}`;
+        const vs = await axios.get(url);
+
+        // TODO: transitions??
+        for (let part of ['OPEN', 'COMPLETED', 'PENDING', 'CANCELLED', 'NO_SHOW']) {
+            for (let vac of ['P', 'M', 'J']) {
+                const id = `${part}_${vac}`;
+                $(`#${id}`).text(vs[id]);
+            }
         }
-        else {
-            clearInterval(interval);
-            if (indicator) clearInterval(indicator);
-            bar.css("width", "80%").css('background-color', 'green');
-            $("body").css('background-color', 'lightgrey');
+        for (let id of ['OPEN_TOTAL', 'COMPLETED_TOTAL',
+            'TOTAL_OC_P', 'TOTAL_OC_M', 'TOTAL_OC_J',
+            'TOTAL_OC',
+            'PENDING_TOTAL', 'CANCELLED_TOTAL', 'NO_SHOW_TOTAL']) {
+            $(`#${id}`).text(vs[id]);
         }
+        // DEBUGGING: $(`#OPEN_TOTAL`).text('0'); - test end condition
+        // for (let tag of data) {
+
+        //     const target = $('#' + tag);
+
+        //     target.css("background", TRANSITION_COLOR).text(data[tag]);
+
+        //     setTimeout(() => {
+        //         target.css('background', AFTER_TRANSITION_COLORS[tag]);
+        //     }, 500);
+        //     if (data['OPEN'] == 0) {
+        //         clearInterval(interval);
+        //         if(indicator) clearInterval(indicator);
+        //         $("#bar").css("width", "100%").css('background-color','green').css('display', 'block');
+        //     }
+        // }
+
     }
 
-    function init_timer() {
-        timeLeft.html('<i class="fas fa-history"></i>&nbsp;3:00');
+    function init_timer(text) {
+        timeLeft.html(`<i class="fas fa-history"></i>&nbsp;${text}`);
     }
 });

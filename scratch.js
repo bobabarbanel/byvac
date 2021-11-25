@@ -25,7 +25,7 @@ axios.get(tokenURL).then(
     (r) => {
         const sessionToken = r.data.sessionToken;
         // console.log({ sessionToken });
-        getTest(sessionToken, theDate);
+        // getTest(sessionToken, theDate);
         // getAppts(sessionToken);
         // getCount('COMPLETED', sessionToken);
         // getCount('OPEN', sessionToken);
@@ -33,8 +33,20 @@ axios.get(tokenURL).then(
         // getAppts(sessionToken,'2021-08-28')
         // getLocations(sessionToken);
         // get_all("2021-02-26", sessionToken);
+        getReasonIds('2021-09-25', sessionToken);
     }
 );
+async function getReasonIds(startDate, sessionToken) {
+    let theURL = BASE_URL +
+        `/reasonIdList?startDate=${startDate}endDate=${startDate}`;
+    theURL += "&sessionToken=" + sessionToken;
+    console.log(theURL);
+    await axios.get(theURL).then(
+        (result) => {
+            console.log(result);
+        }
+    )
+}
 
 function getLocations(token) {
     const theURL =
@@ -144,7 +156,7 @@ function getTest(token, theDate) {
             console.log('pivot', status, vaccineChar)
             vacStatus[status][vaccineChar]++;
         }
-        
+
     }
 }
 
@@ -189,4 +201,73 @@ function get_all(startDate, sessionToken) {
             })
             console.log(JSON.stringify(result, null, 4));
         })
+}
+const reasonIdList = '';
+
+const reasons = {
+    603786:
+        'J',
+    602378:
+        'P',
+    602666:
+        'P',
+    633414:
+        'P',
+    632795:
+        'P',
+    625379:
+        'P',
+    608303:
+        'J',
+    596286:
+        'M',
+    596326:
+        'M',
+    631581:
+        'M',
+    625390:
+        'M',
+    609790:
+        'P',
+    593237:
+        'M',
+    600099:
+        'M',
+    594738:
+        'M',
+    600103:
+        'M',
+    593248:
+        'M',
+    595870:
+        'M',
+    595873:
+        'M',
+    603714:
+        'P',
+    602389:
+        'P',
+    603717:
+        'P',
+    602645:
+        'P',
+}
+function get_reasonIds(startDate, sessionToken) {
+    let reasonIdList = Object.keys(reasons).join(',');
+
+    let statusList = 'PENDING,OPEN,COMPLETED,CANCELLED,NO_SHOW'
+    let theURL = BASE_URL +
+        // `/services?startDate=2021-02-21@endDate=2021-11-21`;
+        // `/reasonIdList?startDate=${startDate}endDate=${startDate}`;
+        `/appointmentList/reportCountsByStatus?reasonIdList=${reasonIdList}&startDate=${startDate}&endDate=${startDate}&statusList=${statusList}`
+
+    theURL += "&sessionToken=" + sessionToken;
+    console.log(theURL);
+    axios.get(theURL).then(
+        (result) => {
+
+            console.log(result.data);
+            console.log('--------------');
+        }
+    ).catch(e => console.log("error", e));
 }
