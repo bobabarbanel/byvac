@@ -1,6 +1,7 @@
 html {
 	font-weight: bold;
-	font: 54px "Lucida Grande", Helvetica, Arial, sans-serif;
+	font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+	font-size: 64px;
 }
 body {
 	padding: 10px;
@@ -9,6 +10,7 @@ container {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	max-height: 95vh;
 }
 
 
@@ -90,7 +92,7 @@ bar {
 }
 
 .vacTotal {
-	font-family: bold .5 rem "Courier New", Courier, monospace;
+	font-family: bold .5rem "Courier New", Courier, monospace;
 	font-size: .9rem;
 	width: 2rem;
 	text-align: right;
@@ -178,7 +180,6 @@ others>div {
 	}
 
 	.results_title {
-
 		justify-content: flex-start;
 	}
 
@@ -226,7 +227,6 @@ others>div {
 		width: 120%;
 		font-size: .8rem;
 		align-self: center;
-		/* border: 1px solid black; */
 		padding-right: 0;
 	}
 
@@ -235,7 +235,6 @@ others>div {
 		text-align: center;
 		margin-left: 0;
 		font-size: 1.5rem;
-		/* border: 1px solid black; */
 		font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
 	}
 
@@ -255,16 +254,11 @@ others>div {
 	}
 
 	.num {
-		/* align-self: flex-start; */
 		margin-left: 0;
-		/* text-align: center; */
-		/* border: 1px solid red; */
 		text-align: right;
 	}
 
 	.tag {
-		/* align-self: center; */
-		/* border: 1px solid red; */
 		margin-left: .5em;
 	}
 
