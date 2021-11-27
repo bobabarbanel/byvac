@@ -199,14 +199,12 @@ function pivot(vs, data) {
   data.forEach(
     ({ status, objectName, count }) => {
       if (count) {
-        objectName.replace(/ .*/, '');
-        let vaccineChar = '';
-        if (objectName.length) {
-          vaccineChar = objectName[0].toUpperCase(); // use first letter P, J, or M
+        objectName = objectName.replace(/ .*/, '');
+        console.log(objectName);
+        if (vaccineList.includes(objectName)) {
+          vs[status][objectName[0].toUpperCase()] += count;
         }
-        if (vaccineChar !== '') {
-          vs[status][vaccineChar] += count;
-        }
+
       }
     }
   )
