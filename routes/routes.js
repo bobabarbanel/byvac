@@ -35,7 +35,7 @@ class VacStore {
       COMPLETED: {},
       PENDING: {},
       NO_SHOW: {},
-      timeStamp: new Date()
+      timeStamp: new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(new Date())
     }
     for (let k of statusList.split(',')) {
       for (let c of ['M', 'P', 'J'])  // vaccine types
@@ -153,6 +153,7 @@ async function getReasonIds(startDate) {
 
 
 async function calculate(theDate, locationId, vs) {
+  console.log('calculate');
   // log('calculate START vs1', vs, { sessionToken, reasonIds });
   reasonIds = await getReasonIds(theDate);
   // log('calculate START vs2', vs, { sessionToken, reasonIds });
@@ -167,6 +168,7 @@ async function calculate(theDate, locationId, vs) {
 
 
 async function queryCounts(theDate, locationId, vs) {
+  console.log('queryCounts');
   const theURL = BASE_URL + `/appointmentList/reportCountsByStatus` +
     `?reasonIdList=${reasonIds}&startDate=${theDate}` +
     `&endDate=${theDate}&statusList=${statusList}&sessionToken=${sessionToken}`;
@@ -177,6 +179,7 @@ async function queryCounts(theDate, locationId, vs) {
     const results = await axios.get(theURL);
     pivot(vs, results.data);
     do_totals(vs, results.data);
+    
     vs.status = 'done';
   }
   catch (err) {
@@ -200,7 +203,7 @@ function pivot(vs, data) {
     ({ status, objectName, count }) => {
       if (count) {
         objectName = objectName.replace(/ .*/, '');
-        console.log(objectName);
+        // console.log(objectName);
         if (vaccineList.includes(objectName)) {
           vs[status][objectName[0].toUpperCase()] += count;
         }
@@ -208,10 +211,18 @@ function pivot(vs, data) {
       }
     }
   )
+  console.log('completed p', vs.COMPLETED.P);
+  console.log('completed m', vs.COMPLETED.M);
 }
 
 
 function do_totals(vs) {
+  /*
+  for (let id of ['OPEN_TOTAL', 'COMPLETED_TOTAL',
+            'TOTAL_OC_P', 'TOTAL_OC_M', 'TOTAL_OC_J',
+            'TOTAL_OC',
+            'PENDING_TOTAL', 'CANCELLED_TOTAL', 'NO_SHOW_TOTAL']) {
+              */
   vs.OPEN_TOTAL = vs.OPEN.P + vs.OPEN.M + vs.OPEN.J;
   vs.COMPLETED_TOTAL = vs.COMPLETED.P + vs.COMPLETED.M + vs.COMPLETED.J;
   vs.TOTAL_OC_P = vs.OPEN.P + vs.COMPLETED.P;
@@ -221,12 +232,13 @@ function do_totals(vs) {
   vs.PENDING_TOTAL = vs.PENDING.P + vs.PENDING.M + vs.PENDING.J;
   vs.NO_SHOW_TOTAL = vs.NO_SHOW.P + vs.NO_SHOW.M + vs.NO_SHOW.J;
   vs.CANCELLED_TOTAL = vs.CANCELLED.P + vs.CANCELLED.M + vs.CANCELLED.J;
+  console.log('completed total', vs.COMPLETED_TOTAL);
 }
 
 router.get('/refresh/:startDate/:location/:locationId',
   function (req, res) { // Consider error handling here??
     const { startDate, location, locationId } = req.params;
-    // log('/refresh', { startDate, location, locationId });
+    console.log('/refresh', { startDate, location, locationId });
     const vs = new VacStore(startDate, location, locationId).getVS();
     log('/refresh', vs)
 

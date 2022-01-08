@@ -4,7 +4,7 @@ $(function () {
     const location = $('location').text().trim();
     const timeLeft = $('.countdown_timer');
     const bar = $('bar');
-    const REFRESH_MINUTES = 3;
+    const REFRESH_MINUTES = .5;
     const REFRESH_TIME = REFRESH_MINUTES * 60 * 1000; // 3 minutes
     let interval = null;
     // const TRANSITION_COLOR = '#AED6F1';
@@ -29,7 +29,6 @@ $(function () {
         }
         else {
             draw(Date.now(), REFRESH_TIME);
-            // console.log('indicator running...');
         }
     }
 
@@ -51,9 +50,7 @@ $(function () {
             timeLeft.html(`<i class="fas fa-history"></i>&nbsp;${min}:${sec}&nbsp;`);
 
             let percent = (80 - ((3 - now) * 80 / 3)); // assumes 3 minute in cycle
-            // console.log(percent);
             bar.css("width", percent + "%")
-            // console.log('setTimeout', bar.css('width'), nowMS, (.995) * end )
             if (nowMS >= (.995) * end) {
                 clearInterval(interval);
                 interval = null;
@@ -63,21 +60,23 @@ $(function () {
     }
 
     async function refreshValues() {
-        // console.log('refreshValues');
         const url = `/refresh/${startDate}/${encodeURI(location)}/${locationId}`;
-        const vs = await axios.get(url);
-
+        let vs = await axios.get(url);
+        vs = vs.data;
+        console.log('refreshValues')
         // TODO: transitions??
         for (let part of ['OPEN', 'COMPLETED', 'PENDING', 'CANCELLED', 'NO_SHOW']) {
             for (let vac of ['P', 'M', 'J']) {
-                const id = `${part}_${vac}`;
-                $(`#${id}`).text(vs[id]);
+                const id = `${part}_${vac}`; // html id
+                $(`#${id}`).text(vs[part][vac]);
             }
         }
         for (let id of ['OPEN_TOTAL', 'COMPLETED_TOTAL',
             'TOTAL_OC_P', 'TOTAL_OC_M', 'TOTAL_OC_J',
             'TOTAL_OC',
             'PENDING_TOTAL', 'CANCELLED_TOTAL', 'NO_SHOW_TOTAL']) {
+                console.log(id, vs[id])
+
             $(`#${id}`).text(vs[id]);
         }
         // DEBUGGING: $(`#OPEN_TOTAL`).text('0'); - test end condition

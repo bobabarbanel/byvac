@@ -64,7 +64,7 @@ bar {
 	margin: auto;
 	width: 90%;
 	max-width: 1400px;
-	font-size: .95rem;
+	font-size: .7rem;
 }
 
 .outer {
@@ -81,14 +81,15 @@ bar {
 }
 
 .left {
-	font-family: bold .8rem "Lucida Grande", Helvetica, Arial, sans-serif;
+	/* font-family: bold .8rem "Lucida Grande", Helvetica, Arial, sans-serif; */
 	text-align: right;
 	padding-right: 1rem;
+	padding-top: .25rem;
 	width: 50%;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	background-color: white
+	background-color: white;
 }
 
 .vacTotal {
