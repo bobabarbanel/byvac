@@ -51,7 +51,7 @@ bar {
 }
 
 .num {
-	width: 1.8em;
+	width: 2.6em;
 	align-self: flex-start;
 	text-align: right;
 }
@@ -62,8 +62,8 @@ bar {
 }
 #whole {
 	margin: auto;
-	width: 95%;
-	max-width: 1400px;
+	width: 100%;
+	max-width: 1800px;
 	font-size: .7rem;
 }
 
@@ -95,7 +95,7 @@ bar {
 .vacTotal {
 	font-family: bold .5rem "Courier New", Courier, monospace;
 	font-size: .9rem;
-	width: 2rem;
+	width: 2.4rem;
 	text-align: right;
 	margin-left: 30px;
 	display: flex;
