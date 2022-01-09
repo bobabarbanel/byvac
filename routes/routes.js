@@ -153,7 +153,7 @@ async function getReasonIds(startDate) {
 
 
 async function calculate(theDate, locationId, vs) {
-  console.log('calculate');
+  log('calculate');
   // log('calculate START vs1', vs, { sessionToken, reasonIds });
   reasonIds = await getReasonIds(theDate);
   // log('calculate START vs2', vs, { sessionToken, reasonIds });
@@ -168,7 +168,7 @@ async function calculate(theDate, locationId, vs) {
 
 
 async function queryCounts(theDate, locationId, vs) {
-  console.log('queryCounts');
+  log('queryCounts');
   const theURL = BASE_URL + `/appointmentList/reportCountsByStatus` +
     `?reasonIdList=${reasonIds}&startDate=${theDate}` +
     `&endDate=${theDate}&statusList=${statusList}&sessionToken=${sessionToken}`;
@@ -203,7 +203,7 @@ function pivot(vs, data) {
     ({ status, objectName, count }) => {
       if (count) {
         objectName = objectName.replace(/ .*/, '');
-        // console.log(objectName);
+        // log(objectName);
         if (vaccineList.includes(objectName)) {
           vs[status][objectName[0].toUpperCase()] += count;
         }
@@ -211,8 +211,8 @@ function pivot(vs, data) {
       }
     }
   )
-  console.log('completed p', vs.COMPLETED.P);
-  console.log('completed m', vs.COMPLETED.M);
+  log('completed p', vs.COMPLETED.P);
+  log('completed m', vs.COMPLETED.M);
 }
 
 
@@ -232,13 +232,13 @@ function do_totals(vs) {
   vs.PENDING_TOTAL = vs.PENDING.P + vs.PENDING.M + vs.PENDING.J;
   vs.NO_SHOW_TOTAL = vs.NO_SHOW.P + vs.NO_SHOW.M + vs.NO_SHOW.J;
   vs.CANCELLED_TOTAL = vs.CANCELLED.P + vs.CANCELLED.M + vs.CANCELLED.J;
-  console.log('completed total', vs.COMPLETED_TOTAL);
+  log('completed total', vs.COMPLETED_TOTAL);
 }
 
 router.get('/refresh/:startDate/:location/:locationId',
   function (req, res) { // Consider error handling here??
     const { startDate, location, locationId } = req.params;
-    console.log('/refresh', { startDate, location, locationId });
+    log('/refresh', { startDate, location, locationId });
     const vs = new VacStore(startDate, location, locationId).getVS();
     log('/refresh', vs)
 

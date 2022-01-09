@@ -63,7 +63,7 @@ $(function () {
         const url = `/refresh/${startDate}/${encodeURI(location)}/${locationId}`;
         let vs = await axios.get(url);
         vs = vs.data;
-        console.log('refreshValues')
+        // console.log('refreshValues')
         // TODO: transitions??
         for (let part of ['OPEN', 'COMPLETED', 'PENDING', 'CANCELLED', 'NO_SHOW']) {
             for (let vac of ['P', 'M', 'J']) {
@@ -75,7 +75,6 @@ $(function () {
             'TOTAL_OC_P', 'TOTAL_OC_M', 'TOTAL_OC_J',
             'TOTAL_OC',
             'PENDING_TOTAL', 'CANCELLED_TOTAL', 'NO_SHOW_TOTAL']) {
-                console.log(id, vs[id])
 
             $(`#${id}`).text(vs[id]);
         }
