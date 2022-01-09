@@ -62,13 +62,13 @@ bar {
 }
 #whole {
 	margin: auto;
-	width: 90%;
+	width: 95%;
 	max-width: 1400px;
 	font-size: .7rem;
 }
 
 .outer {
-	width: 80%;
+	/* width: 80%; */
 	margin: 0 auto;
 	display: flex;
 	flex-direction: row;
