@@ -4,7 +4,7 @@ $(function () {
     const location = $('location').text().trim();
     const timeLeft = $('.countdown_timer');
     const bar = $('bar');
-    const REFRESH_MINUTES = .5;
+    const REFRESH_MINUTES = 3;
     const REFRESH_TIME = REFRESH_MINUTES * 60 * 1000; // 3 minutes
     let interval = null;
     // const TRANSITION_COLOR = '#AED6F1';
