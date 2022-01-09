@@ -24,6 +24,7 @@ class VacStore {
   }
 
   init(date, location, locId) {
+    
     const vs =
     {
       status: null,
@@ -35,7 +36,7 @@ class VacStore {
       COMPLETED: {},
       PENDING: {},
       NO_SHOW: {},
-      timeStamp: new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long' }).format(new Date())
+      timeStamp: new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long', timeZone: 'America/Los_Angeles' }).format(new Date())
     }
     for (let k of statusList.split(',')) {
       for (let c of ['M', 'P', 'J'])  // vaccine types
@@ -179,7 +180,7 @@ async function queryCounts(theDate, locationId, vs) {
     const results = await axios.get(theURL);
     pivot(vs, results.data);
     do_totals(vs, results.data);
-    
+
     vs.status = 'done';
   }
   catch (err) {
