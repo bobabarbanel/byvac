@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const md5 = require('md5');
-const DEBUG = false;
+const DEBUG = true;
 function log(...args) {
   if (DEBUG) {
     console.log(...args);
@@ -11,7 +11,7 @@ function log(...args) {
 const BASE_URL = "https://api.timetap.com/test";
 let sessionToken = null;
 const statusList = 'PENDING,OPEN,COMPLETED,CANCELLED,NO_SHOW';
-const vaccineList = 'Moderna,Pfizer,J&J'
+const vaccineList = 'Moderna,Pfizer,Flu'
 
 let reasonIds = [];
 class VacStore {
@@ -39,7 +39,7 @@ class VacStore {
       timeStamp: new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'long', timeZone: 'America/Los_Angeles' }).format(new Date())
     }
     for (let k of statusList.split(',')) {
-      for (let c of ['M', 'P', 'J'])  // vaccine types
+      for (let c of ['M', 'P', 'F'])  // vaccine types // 23 Oct 2022: all ow "F" for Flu
         vs[k][c] = 0;
     }
     return vs;
@@ -204,9 +204,13 @@ function pivot(vs, data) {
     ({ status, objectName, count }) => {
       if (count) {
         objectName = objectName.replace(/ .*/, '');
-        // log(objectName);
+        
         if (vaccineList.includes(objectName)) {
+          log(objectName);
           vs[status][objectName[0].toUpperCase()] += count;
+        }
+        else {
+          log("Not Found", objectName);
         }
 
       }
@@ -220,19 +224,19 @@ function pivot(vs, data) {
 function do_totals(vs) {
   /*
   for (let id of ['OPEN_TOTAL', 'COMPLETED_TOTAL',
-            'TOTAL_OC_P', 'TOTAL_OC_M', 'TOTAL_OC_J',
+            'TOTAL_OC_P', 'TOTAL_OC_M', 'TOTAL_OC_F',
             'TOTAL_OC',
             'PENDING_TOTAL', 'CANCELLED_TOTAL', 'NO_SHOW_TOTAL']) {
               */
-  vs.OPEN_TOTAL = vs.OPEN.P + vs.OPEN.M + vs.OPEN.J;
-  vs.COMPLETED_TOTAL = vs.COMPLETED.P + vs.COMPLETED.M + vs.COMPLETED.J;
+  vs.OPEN_TOTAL = vs.OPEN.P + vs.OPEN.M + vs.OPEN.F;
+  vs.COMPLETED_TOTAL = vs.COMPLETED.P + vs.COMPLETED.M + vs.COMPLETED.F;
   vs.TOTAL_OC_P = vs.OPEN.P + vs.COMPLETED.P;
   vs.TOTAL_OC_M = vs.OPEN.M + vs.COMPLETED.M;
-  vs.TOTAL_OC_J = vs.OPEN.J + vs.COMPLETED.J;
-  vs.TOTAL_OC = vs.TOTAL_OC_P + vs.TOTAL_OC_M + vs.TOTAL_OC_J;
-  vs.PENDING_TOTAL = vs.PENDING.P + vs.PENDING.M + vs.PENDING.J;
-  vs.NO_SHOW_TOTAL = vs.NO_SHOW.P + vs.NO_SHOW.M + vs.NO_SHOW.J;
-  vs.CANCELLED_TOTAL = vs.CANCELLED.P + vs.CANCELLED.M + vs.CANCELLED.J;
+  vs.TOTAL_OC_F = vs.OPEN.F + vs.COMPLETED.F;
+  vs.TOTAL_OC = vs.TOTAL_OC_P + vs.TOTAL_OC_M + vs.TOTAL_OC_F;
+  vs.PENDING_TOTAL = vs.PENDING.P + vs.PENDING.M + vs.PENDING.F;
+  vs.NO_SHOW_TOTAL = vs.NO_SHOW.P + vs.NO_SHOW.M + vs.NO_SHOW.F;
+  vs.CANCELLED_TOTAL = vs.CANCELLED.P + vs.CANCELLED.M + vs.CANCELLED.F;
   log('completed total', vs.COMPLETED_TOTAL);
 }
 

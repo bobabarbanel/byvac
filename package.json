@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "start_env": "export $(cat .env | xargs) && nodemon --watch . ./bin/www",
     "start": "nodemon --watch . ./bin/www"
   },
   "dependencies": {
