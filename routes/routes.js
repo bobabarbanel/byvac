@@ -24,7 +24,6 @@ class VacStore {
   }
 
   init(date, location, locId) {
-    
     const vs =
     {
       status: null,
@@ -104,7 +103,7 @@ router.get('/appts/:startDate/:location/:locationId',
     calculate(startDate, locationId, vs)
       .then(
         () => {
-          log('calculate returns')
+          // log('calculate returns')
           switch (vs.status) {
             case 'done':
               res.render('results', vs); // deep copy ?
@@ -154,14 +153,14 @@ async function getReasonIds(startDate) {
 
 
 async function calculate(theDate, locationId, vs) {
-  log('calculate');
+  // log('calculate');
   // log('calculate START vs1', vs, { sessionToken, reasonIds });
   reasonIds = await getReasonIds(theDate);
   // log('calculate START vs2', vs, { sessionToken, reasonIds });
   // log('calculate', { theDate, locationId, vs });
 
   // await queryPage(pageSize, pageNumber++, theDate, locationId, vs);
-  log('queryCounts', 'before')
+  // log('queryCounts', 'before')
   return queryCounts(theDate, locationId, vs);
 
 }
@@ -169,12 +168,12 @@ async function calculate(theDate, locationId, vs) {
 
 
 async function queryCounts(theDate, locationId, vs) {
-  log('queryCounts');
+  // log('queryCounts');
   const theURL = BASE_URL + `/appointmentList/reportCountsByStatus` +
     `?reasonIdList=${reasonIds}&startDate=${theDate}` +
     `&endDate=${theDate}&statusList=${statusList}&sessionToken=${sessionToken}`;
   // log('queryCounts start', theDate, locationId, reasonIds, sessionToken, statusList);
-  log(theURL)
+  // log(theURL)
   try {
     vs.status = 'in-progress';
     const results = await axios.get(theURL);
@@ -204,20 +203,19 @@ function pivot(vs, data) {
     ({ status, objectName, count }) => {
       if (count) {
         objectName = objectName.replace(/ .*/, '');
-        
         if (vaccineList.includes(objectName)) {
-          log(objectName);
+          // log(objectName);
           vs[status][objectName[0].toUpperCase()] += count;
         }
         else {
-          log("Not Found", objectName);
+          log("vaccine not found", objectName);
         }
 
       }
     }
   )
-  log('completed p', vs.COMPLETED.P);
-  log('completed m', vs.COMPLETED.M);
+  // log('completed p', vs.COMPLETED.P);
+  // log('completed m', vs.COMPLETED.M);
 }
 
 
@@ -237,15 +235,15 @@ function do_totals(vs) {
   vs.PENDING_TOTAL = vs.PENDING.P + vs.PENDING.M + vs.PENDING.F;
   vs.NO_SHOW_TOTAL = vs.NO_SHOW.P + vs.NO_SHOW.M + vs.NO_SHOW.F;
   vs.CANCELLED_TOTAL = vs.CANCELLED.P + vs.CANCELLED.M + vs.CANCELLED.F;
-  log('completed total', vs.COMPLETED_TOTAL);
+  // log('completed total', vs.COMPLETED_TOTAL);
 }
 
 router.get('/refresh/:startDate/:location/:locationId',
   function (req, res) { // Consider error handling here??
     const { startDate, location, locationId } = req.params;
-    log('/refresh', { startDate, location, locationId });
+    // log('/refresh', { startDate, location, locationId });
     const vs = new VacStore(startDate, location, locationId).getVS();
-    log('/refresh', vs)
+    // log('/refresh', vs)
 
     calculate(startDate, locationId, vs)
       .then(

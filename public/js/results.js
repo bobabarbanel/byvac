@@ -3,8 +3,9 @@ $(function () {
     const startDate = $('startDate').text().trim();
     const location = $('location').text().trim();
     const timeLeft = $('.countdown_timer');
+c
     const bar = $('bar');
-    const REFRESH_MINUTES = 3;
+    const REFRESH_MINUTES = 3; 
     const REFRESH_TIME = REFRESH_MINUTES * 60 * 1000; // 3 minutes
     let interval = null;
     // const TRANSITION_COLOR = '#AED6F1';
@@ -39,17 +40,17 @@ $(function () {
         interval = setInterval(() => {
             const nowMS = Date.now() - start;
             const now = nowMS / 1000 / 60;
-            let min = Math.floor(3 - now);
-            let sec = Math.floor(((3 - now) - min) * 60);
+            let min = Math.floor(REFRESH_MINUTES - now);
+            let sec = Math.floor((REFRESH_MINUTES - now - min) * 60);
             sec = Math.round(sec / 5) * 5;
             if (sec < 10) sec = '0' + sec;
             if (min < 0) {
-                min = 3;
+                min = REFRESH_MINUTES;
                 sec = '00';
             }
             timeLeft.html(`<i class="fas fa-history"></i>&nbsp;${min}:${sec}&nbsp;`);
 
-            let percent = (80 - ((3 - now) * 80 / 3)); // assumes 3 minute in cycle
+            let percent = 80 - (REFRESH_MINUTES - now) * 80 / REFRESH_MINUTES; // assumes 3 minute in cycle
             bar.css("width", percent + "%")
             if (nowMS >= (.995) * end) {
                 clearInterval(interval);
