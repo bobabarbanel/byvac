@@ -3,9 +3,9 @@ $(function () {
     const startDate = $('startDate').text().trim();
     const location = $('location').text().trim();
     const timeLeft = $('.countdown_timer');
-c
     const bar = $('bar');
-    const REFRESH_MINUTES = 3; 
+
+    const REFRESH_MINUTES = 3;
     const REFRESH_TIME = REFRESH_MINUTES * 60 * 1000; // 3 minutes
     let interval = null;
     // const TRANSITION_COLOR = '#AED6F1';
@@ -35,7 +35,7 @@ c
 
     function draw(start, end) {
         bar.css("width", 0.1 + "%");
-        init_timer('3:00');
+        init_timer(`${REFRESH_MINUTES}:00`);
 
         interval = setInterval(() => {
             const nowMS = Date.now() - start;
@@ -48,9 +48,9 @@ c
                 min = REFRESH_MINUTES;
                 sec = '00';
             }
-            timeLeft.html(`<i class="fas fa-history"></i>&nbsp;${min}:${sec}&nbsp;`);
+            init_timer(`${min}:${sec}`);
 
-            let percent = 80 - (REFRESH_MINUTES - now) * 80 / REFRESH_MINUTES; // assumes 3 minute in cycle
+            let percent = 80 - (REFRESH_MINUTES - now) * 80 / REFRESH_MINUTES;
             bar.css("width", percent + "%")
             if (nowMS >= (.995) * end) {
                 clearInterval(interval);
@@ -64,7 +64,6 @@ c
         const url = `/refresh/${startDate}/${encodeURI(location)}/${locationId}`;
         let vs = await axios.get(url);
         vs = vs.data;
-        // console.log('refreshValues')
         // TODO: transitions??
         for (let part of ['OPEN', 'COMPLETED', 'PENDING', 'CANCELLED', 'NO_SHOW']) {
             for (let vac of ['P', 'M', 'J']) {
@@ -99,6 +98,6 @@ c
     }
 
     function init_timer(text) {
-        timeLeft.html(`<i class="fas fa-history"></i>&nbsp;${text}`);
+        timeLeft.html(`<i class="fas fa-history"></i>&nbsp;${text}&nbsp;`);
     }
 });

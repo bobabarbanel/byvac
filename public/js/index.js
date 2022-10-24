@@ -1,13 +1,13 @@
 $(function () {
     $('.site input').prop('checked', false);
-    // $("#launchButton").prop("disabled", true);
+
     let today = new Date();
     let month = today.getMonth() + 1;
     if (month < 10) month = "0" + month;
     let day = today.getDate();
     if (day < 10) day = "0" + day;
     const button = $('button');
-    
+
     $('#datepicker').datepicker('setDate', null);
 
     $("#selectedDate").text(`${today.getFullYear()}-${month}-${day}`);
@@ -34,11 +34,10 @@ $(function () {
         button.prop("disabled", false);
     }
     function launch() {
-        // console.log('launch');
         const startDate = $('#selectedDate').text().trim();
-        const location = $('.site input:checked').parent().text().trim(); // .replace(/\//, '_'); // remove '/' in location text
+        const location = $('.site input:checked').parent().text().trim();
         const locationId = $('.site input:checked').val();
-        // console.log({startDate,location, locationId})
+
         $('container').hide();
         $('loading').show();
         fade_in($('loading'));
@@ -47,14 +46,14 @@ $(function () {
     async function fade_in(loadText) {
         let opacity = 0;
         loadText.css('background-color', `rgba(0,0,255,${opacity})`);
-        
+
         const interval = setInterval(
             () => {
                 opacity += 0.1;
                 if(opacity > 1) clearInterval(interval);
                 loadText.css('background-color', `rgba(0,0,255,${opacity})`);
             },
-            250
+            300
         )
         return;
     }

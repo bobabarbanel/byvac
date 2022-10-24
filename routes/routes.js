@@ -70,35 +70,15 @@ router.get('/', function (ignore, res) {
   res.render("index");
 });
 
-
-// Admin routes
-// router.get('/cache',
-//   function (req, res) {
-//     res.json(recs);
-//   });
-// router.get('/clear',
-//   function (ignore, res) {
-//     if (Object.values(recs).find(v => v.getCache().status !== 'done')) {
-//       res.json({ message: 'Active Calculations' });
-//     }
-//     else {
-
-//       res.json({ message: 'Cache cleared.' });
-//     }
-//   });
-
 router.get('/appts/:startDate/:location/:locationId',
   function (req, res) {
     let { startDate, location, locationId } = req.params;
-    // log("/appts get", req.params);
+
     startDate = startDate.trim();
     location = location.trim();
     locationId = locationId.trim();
     // get initialized vs
     const vs = new VacStore(startDate, location, locationId).getVS();
-    ////////////////////////////////////////
-    // log('/appt calling calculate')
-    ////////////////////////////////////////
 
     calculate(startDate, locationId, vs)
       .then(
@@ -147,33 +127,21 @@ async function getReasonIds(startDate) {
   return reasonIds;
 }
 
-// function calculate(startDate, locationId, vs) {
-//   // log('calculate 1 vs ', vs);
-
-
-
 async function calculate(theDate, locationId, vs) {
-  // log('calculate');
-  // log('calculate START vs1', vs, { sessionToken, reasonIds });
-  reasonIds = await getReasonIds(theDate);
-  // log('calculate START vs2', vs, { sessionToken, reasonIds });
-  // log('calculate', { theDate, locationId, vs });
+  log('calculate');
 
-  // await queryPage(pageSize, pageNumber++, theDate, locationId, vs);
-  // log('queryCounts', 'before')
+  reasonIds = await getReasonIds(theDate);
+
   return queryCounts(theDate, locationId, vs);
 
 }
 
-
-
 async function queryCounts(theDate, locationId, vs) {
-  // log('queryCounts');
+  log('queryCounts');
   const theURL = BASE_URL + `/appointmentList/reportCountsByStatus` +
     `?reasonIdList=${reasonIds}&startDate=${theDate}` +
     `&endDate=${theDate}&statusList=${statusList}&sessionToken=${sessionToken}`;
-  // log('queryCounts start', theDate, locationId, reasonIds, sessionToken, statusList);
-  // log(theURL)
+
   try {
     vs.status = 'in-progress';
     const results = await axios.get(theURL);
@@ -204,7 +172,7 @@ function pivot(vs, data) {
       if (count) {
         objectName = objectName.replace(/ .*/, '');
         if (vaccineList.includes(objectName)) {
-          // log(objectName);
+
           vs[status][objectName[0].toUpperCase()] += count;
         }
         else {
@@ -214,18 +182,10 @@ function pivot(vs, data) {
       }
     }
   )
-  // log('completed p', vs.COMPLETED.P);
-  // log('completed m', vs.COMPLETED.M);
 }
 
 
 function do_totals(vs) {
-  /*
-  for (let id of ['OPEN_TOTAL', 'COMPLETED_TOTAL',
-            'TOTAL_OC_P', 'TOTAL_OC_M', 'TOTAL_OC_F',
-            'TOTAL_OC',
-            'PENDING_TOTAL', 'CANCELLED_TOTAL', 'NO_SHOW_TOTAL']) {
-              */
   vs.OPEN_TOTAL = vs.OPEN.P + vs.OPEN.M + vs.OPEN.F;
   vs.COMPLETED_TOTAL = vs.COMPLETED.P + vs.COMPLETED.M + vs.COMPLETED.F;
   vs.TOTAL_OC_P = vs.OPEN.P + vs.COMPLETED.P;
@@ -235,13 +195,12 @@ function do_totals(vs) {
   vs.PENDING_TOTAL = vs.PENDING.P + vs.PENDING.M + vs.PENDING.F;
   vs.NO_SHOW_TOTAL = vs.NO_SHOW.P + vs.NO_SHOW.M + vs.NO_SHOW.F;
   vs.CANCELLED_TOTAL = vs.CANCELLED.P + vs.CANCELLED.M + vs.CANCELLED.F;
-  // log('completed total', vs.COMPLETED_TOTAL);
 }
 
 router.get('/refresh/:startDate/:location/:locationId',
   function (req, res) { // Consider error handling here??
     const { startDate, location, locationId } = req.params;
-    // log('/refresh', { startDate, location, locationId });
+    log('/refresh', { startDate, location, locationId });
     const vs = new VacStore(startDate, location, locationId).getVS();
     // log('/refresh', vs)
 

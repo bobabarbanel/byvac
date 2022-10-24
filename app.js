@@ -1,13 +1,13 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
+let createError = require('http-errors');
+let express = require('express');
+let path = require('path');
+let cookieParser = require('cookie-parser');
 
 
-var indexRouter = require('./routes/routes');
-
-var app = express();
-
+let indexRouter = require('./routes/routes');
+const morgan = require('morgan'); // debugging
+let app = express();
+app.use(morgan('tiny')); // debugging
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.engine('html', require('ejs').renderFile);
@@ -23,7 +23,7 @@ app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404, "catch 404?"));
+  next(createError(404, "error caught"));
 });
 
 // error handler
