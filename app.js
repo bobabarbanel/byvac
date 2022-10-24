@@ -5,15 +5,14 @@ let cookieParser = require('cookie-parser');
 
 
 let indexRouter = require('./routes/routes');
-const morgan = require('morgan'); // debugging
+// const morgan = require('morgan'); // debugging
 let app = express();
-app.use(morgan('tiny')); // debugging
+// app.use(morgan('tiny')); // debugging
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
-// app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
